@@ -6,6 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { mockBackend, searchCreativeInterests, type SkillRecommendation } from '@/services/mockBackend';
+import { useAuth } from '@/contexts/AuthContext';
+import { useActivityTracker } from '@/hooks/useActivityTracker';
 
 interface CreativeJourneyProps {
   onBack: () => void;
@@ -27,6 +29,10 @@ const CreativeJourney: React.FC<CreativeJourneyProps> = ({ onBack }) => {
   const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
+  
+  // Auth and activity tracking
+  const { user } = useAuth();
+  const { trackActivity } = useActivityTracker();
 
   const categories = [
     { id: 'design', name: 'Graphic Design', icon: Palette, color: 'bg-purple-500' },
@@ -74,10 +80,17 @@ const CreativeJourney: React.FC<CreativeJourneyProps> = ({ onBack }) => {
     setActiveSuggestionIndex(-1);
   };
 
-  const handleSuggestionClick = (suggestion: string) => {
+  const handleSuggestionClick = async (suggestion: string) => {
     setUserInterest(suggestion);
     setShowSuggestions(false);
     setActiveSuggestionIndex(-1);
+    
+    // Track course selection activity if user is logged in
+    if (user) {
+      await trackActivity('course_selected', {
+        title: suggestion
+      });
+    }
   };
 
   const handleInputKeyDown = (e: React.KeyboardEvent) => {
@@ -135,6 +148,13 @@ const CreativeJourney: React.FC<CreativeJourneyProps> = ({ onBack }) => {
     setIsLoading(true);
     
     try {
+      // Track exercise selection activity if user is logged in
+      if (user) {
+        await trackActivity('exercise_selected', {
+          title: userInterest
+        });
+      }
+      
       // Use mock backend service for processing
       const recommendation = await mockBackend.processSkillJourney(userInterest, {
         delay: 1000,

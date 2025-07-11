@@ -466,5 +466,24 @@ export class MockBackendService {
   }
 }
 
+// Legacy function for backward compatibility
+export function generateFeedback() {
+  const categories = ['Composition', 'Color Theory', 'Typography', 'Visual Hierarchy'];
+  const ratings = [6, 7, 8, 9, 10];
+  const feedbacks = [
+    'Your composition demonstrates strong understanding of visual balance. Consider experimenting with more dynamic arrangements to create greater visual impact.',
+    'The color palette works harmoniously. Try incorporating complementary colors as accent elements to make key areas stand out more effectively.',
+    'Your technical execution is solid. Focus on refining details and adding more contrast to guide the viewer\'s attention through your piece.',
+    'Great conceptual foundation! To enhance your work, consider adding more texture and depth to create a richer visual experience.',
+    'Your artistic vision comes through clearly. Experiment with different lighting techniques to add more dimension and mood to your composition.'
+  ];
+  
+  return {
+    feedback: feedbacks[Math.floor(Math.random() * feedbacks.length)],
+    rating: ratings[Math.floor(Math.random() * ratings.length)],
+    categories: categories.slice(0, Math.floor(Math.random() * 3) + 2)
+  };
+}
+
 // Export singleton instance
 export const mockBackend = new MockBackendService();

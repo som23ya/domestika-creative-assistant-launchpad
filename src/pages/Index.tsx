@@ -38,7 +38,16 @@ const Index = () => {
   }
 
   if (currentView === 'feedback') {
-    return <ProjectFeedback onBack={() => setCurrentView('home')} />;
+    return (
+      <div className="min-h-screen bg-white">
+        <Header />
+        <div className="py-8 px-domestika">
+          <div className="max-w-domestika mx-auto">
+            <ProjectFeedback onBack={() => setCurrentView('home')} />
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
