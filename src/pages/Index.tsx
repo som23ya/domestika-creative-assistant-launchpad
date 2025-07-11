@@ -149,15 +149,20 @@ const Index = () => {
 
       {/* Footer */}
       <footer className="py-12 px-4 bg-gray-50 border-t border-gray-200">
-        <div className="max-w-6xl mx-auto text-center">
+        <div className="max-w-6xl mx-auto text-center space-y-4">
           <p className="text-gray-600">
             Powered by advanced AI technology • Inspired by creative excellence
           </p>
-          <div className="mt-4 flex justify-center items-center space-x-2">
+          <div className="flex justify-center items-center space-x-2">
             <Sparkles className="w-5 h-5 text-purple-600" />
             <span className="text-sm text-gray-500 creative-text-gradient font-medium">
               Domestika Creative Assistant
             </span>
+          </div>
+          <div className="pt-4 border-t border-gray-200">
+            <p className="text-sm text-gray-500">
+              Prototype by <span className="font-medium text-gray-700">AI Assistant</span> for Domestika Take-Home Assignment
+            </p>
           </div>
         </div>
       </footer>

@@ -81,8 +81,8 @@ const CreativeJourney: React.FC<CreativeJourneyProps> = ({ onBack }) => {
 
   if (showPersonalizedJourney) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50 py-8 px-4">
-        <div className="max-w-4xl mx-auto">
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50 py-4 sm:py-8 px-4">
+        <div className="max-w-4xl mx-auto modal-fade-in">
           <Button 
             onClick={() => setShowPersonalizedJourney(false)}
             variant="ghost" 
@@ -92,16 +92,16 @@ const CreativeJourney: React.FC<CreativeJourneyProps> = ({ onBack }) => {
             Back to Journey Options
           </Button>
 
-          <div className="text-center mb-8">
-            <h2 className="text-4xl font-bold creative-text-gradient mb-4">
+          <div className="text-center mb-8 slide-up">
+            <h2 className="text-3xl sm:text-4xl font-bold creative-text-gradient mb-4">
               Personalized Skill Journey
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto px-4">
               Tell us your creative interests and get personalized course recommendations and practice exercises.
             </p>
           </div>
 
-          <Card className="bg-white/90 backdrop-blur-sm border-0 shadow-2xl mb-8">
+          <Card className="bg-white/90 backdrop-blur-sm border-0 shadow-2xl mb-8 scale-fade-in">
             <CardHeader>
               <CardTitle className="text-2xl creative-text-gradient flex items-center">
                 <Target className="w-6 h-6 mr-2" />
@@ -114,10 +114,10 @@ const CreativeJourney: React.FC<CreativeJourneyProps> = ({ onBack }) => {
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="interest">Your Creative Interest</Label>
-                <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row gap-2">
                   <Input
                     id="interest"
-                    placeholder="e.g., illustration, UX design, photography..."
+                    placeholder="Enter your creative interest, like illustration or UX design"
                     value={userInterest}
                     onChange={(e) => setUserInterest(e.target.value)}
                     onKeyPress={handleKeyPress}
@@ -155,7 +155,7 @@ const CreativeJourney: React.FC<CreativeJourneyProps> = ({ onBack }) => {
                         Recommendations for "{userInterest}"
                       </h3>
                       
-                      <div className="grid md:grid-cols-2 gap-4">
+                      <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-4">
                         <Card className="border border-purple-200 bg-gradient-to-br from-purple-50 to-blue-50">
                           <CardHeader className="pb-3">
                             <CardTitle className="text-lg flex items-center text-purple-700">
@@ -219,8 +219,8 @@ const CreativeJourney: React.FC<CreativeJourneyProps> = ({ onBack }) => {
 
   if (selectedCategory) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50 py-8 px-4">
-        <div className="max-w-4xl mx-auto">
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50 py-4 sm:py-8 px-4">
+        <div className="max-w-4xl mx-auto modal-fade-in">
           <Button 
             onClick={onBack}
             variant="ghost" 
@@ -230,7 +230,7 @@ const CreativeJourney: React.FC<CreativeJourneyProps> = ({ onBack }) => {
             Back to Home
           </Button>
 
-          <Card className="bg-white/90 backdrop-blur-sm border-0 shadow-2xl">
+          <Card className="bg-white/90 backdrop-blur-sm border-0 shadow-2xl scale-fade-in">
             <CardHeader>
               <CardTitle className="text-2xl creative-text-gradient">
                 Your Creative Path: {categories.find(c => c.id === selectedCategory)?.name}
@@ -277,8 +277,8 @@ const CreativeJourney: React.FC<CreativeJourneyProps> = ({ onBack }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50 py-8 px-4">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50 py-4 sm:py-8 px-4">
+      <div className="max-w-4xl mx-auto modal-fade-in">
         <Button 
           onClick={onBack}
           variant="ghost" 
@@ -288,18 +288,18 @@ const CreativeJourney: React.FC<CreativeJourneyProps> = ({ onBack }) => {
           Back to Home
         </Button>
 
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold creative-text-gradient mb-4">
+        <div className="text-center mb-8 sm:mb-12 slide-up">
+          <h2 className="text-3xl sm:text-4xl font-bold creative-text-gradient mb-4">
             Start Your Creative Journey
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
+          <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto mb-6 sm:mb-8 px-4">
             Choose how you'd like to begin your creative adventure with our AI assistant.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8 sm:mb-12">
             <Button
               onClick={() => setShowPersonalizedJourney(true)}
-              className="creative-gradient text-white hover:opacity-90 transition-all duration-300 px-8 py-4 text-lg font-semibold rounded-xl shadow-2xl transform hover:scale-105"
+              className="creative-gradient text-white hover:opacity-90 transition-all duration-300 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-xl shadow-2xl transform hover:scale-105"
             >
               <Target className="w-6 h-6 mr-2" />
               Personalized Skill Journey
@@ -308,7 +308,7 @@ const CreativeJourney: React.FC<CreativeJourneyProps> = ({ onBack }) => {
             <Button
               onClick={() => {}}
               variant="outline"
-              className="border-2 border-purple-200 text-purple-700 hover:bg-purple-50 transition-all duration-300 px-8 py-4 text-lg font-semibold rounded-xl shadow-lg transform hover:scale-105"
+              className="border-2 border-purple-200 text-purple-700 hover:bg-purple-50 transition-all duration-300 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-xl shadow-lg transform hover:scale-105"
             >
               <Lightbulb className="w-6 h-6 mr-2" />
               Browse Categories
@@ -316,7 +316,7 @@ const CreativeJourney: React.FC<CreativeJourneyProps> = ({ onBack }) => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {categories.map((category) => (
             <Card 
               key={category.id}

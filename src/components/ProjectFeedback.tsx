@@ -79,8 +79,8 @@ const ProjectFeedback: React.FC<ProjectFeedbackProps> = ({ onBack }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 py-8 px-4">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 py-4 sm:py-8 px-4">
+      <div className="max-w-4xl mx-auto modal-fade-in">
         <Button 
           onClick={onBack}
           variant="ghost" 
@@ -90,19 +90,19 @@ const ProjectFeedback: React.FC<ProjectFeedbackProps> = ({ onBack }) => {
           Back to Home
         </Button>
 
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold creative-text-gradient mb-4">
+        <div className="text-center mb-8 sm:mb-12 slide-up">
+          <h2 className="text-3xl sm:text-4xl font-bold creative-text-gradient mb-4">
             Intelligent Feedback Loop
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto px-4">
             Upload your creative work or describe your project to receive AI-powered insights and personalized feedback to enhance your skills.
           </p>
         </div>
 
         {!feedbackGenerated ? (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
             {/* Upload Section */}
-            <Card className="bg-white/90 backdrop-blur-sm border-0 shadow-xl">
+            <Card className="bg-white/90 backdrop-blur-sm border-0 shadow-xl scale-fade-in">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-xl text-gray-800">
                   <Upload className="w-5 h-5 text-purple-600" />
@@ -149,7 +149,7 @@ const ProjectFeedback: React.FC<ProjectFeedbackProps> = ({ onBack }) => {
             </Card>
 
             {/* Description Section */}
-            <Card className="bg-white/90 backdrop-blur-sm border-0 shadow-xl">
+            <Card className="bg-white/90 backdrop-blur-sm border-0 shadow-xl scale-fade-in">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-xl text-gray-800">
                   <MessageSquare className="w-5 h-5 text-blue-600" />
@@ -161,10 +161,10 @@ const ProjectFeedback: React.FC<ProjectFeedbackProps> = ({ onBack }) => {
               </CardHeader>
               <CardContent>
                 <Textarea
-                  placeholder="Describe your project... (e.g., 'This is a character sketch', 'A wireframe for a mobile app', 'Logo design for a bakery')"
+                  placeholder="Describe your project in detail... (e.g., 'This is a character sketch for a fantasy story', 'A wireframe for a mobile food delivery app', 'Logo design for an organic bakery')"
                   value={projectDescription}
                   onChange={(e) => setProjectDescription(e.target.value)}
-                  className="min-h-[200px] resize-none border-purple-200 focus:border-purple-400"
+                  className="min-h-[150px] sm:min-h-[200px] resize-none border-purple-200 focus:border-purple-400"
                 />
                 
                 <div className="mt-6 flex flex-wrap gap-2">
@@ -179,7 +179,7 @@ const ProjectFeedback: React.FC<ProjectFeedbackProps> = ({ onBack }) => {
             </Card>
           </div>
         ) : (
-          <Card className={`bg-white/90 backdrop-blur-sm border-2 shadow-2xl ${getFeedbackBgColor()}`}>
+          <Card className={`bg-white/90 backdrop-blur-sm border-2 shadow-2xl ${getFeedbackBgColor()} scale-fade-in`}>
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-2xl text-gray-800">
                 {React.createElement(getFeedbackIcon(), { className: `w-6 h-6 ${getFeedbackColor()}` })}
@@ -200,12 +200,12 @@ const ProjectFeedback: React.FC<ProjectFeedbackProps> = ({ onBack }) => {
         )}
 
         {/* Action Buttons */}
-        <div className="mt-8 flex justify-center gap-4">
+        <div className="mt-6 sm:mt-8 flex justify-center gap-4">
           {!feedbackGenerated ? (
             <Button
               onClick={handleGetFeedback}
-              disabled={isLoading}
-              className="creative-gradient text-white hover:opacity-90 px-8 py-3 text-lg"
+              disabled={isLoading || (!projectDescription.trim() && !uploadedFile)}
+              className="creative-gradient text-white hover:opacity-90 px-6 sm:px-8 py-3 text-base sm:text-lg disabled:opacity-50"
             >
               {isLoading ? (
                 <>
@@ -220,17 +220,17 @@ const ProjectFeedback: React.FC<ProjectFeedbackProps> = ({ onBack }) => {
               )}
             </Button>
           ) : (
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               <Button
                 onClick={handleReset}
                 variant="outline"
-                className="border-purple-200 text-purple-600 hover:bg-purple-50 px-6"
+                className="border-purple-200 text-purple-600 hover:bg-purple-50 px-4 sm:px-6"
               >
                 Upload Another Project
               </Button>
               <Button
                 onClick={handleGetFeedback}
-                className="creative-gradient text-white hover:opacity-90 px-6"
+                className="creative-gradient text-white hover:opacity-90 px-4 sm:px-6"
               >
                 Get More Feedback
               </Button>
