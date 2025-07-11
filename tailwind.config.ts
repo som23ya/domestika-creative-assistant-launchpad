@@ -18,6 +18,22 @@ export default {
 			}
 		},
 		extend: {
+			fontFamily: {
+				'domestika': ['Montserrat', 'system-ui', 'sans-serif'],
+				'sans': ['Montserrat', 'system-ui', 'sans-serif'],
+			},
+			fontSize: {
+				'h1': ['32px', { lineHeight: '1.2', fontWeight: '700' }],
+				'h2': ['24px', { lineHeight: '1.2', fontWeight: '700' }],
+				'body': ['16px', { lineHeight: '1.5', fontWeight: '400' }],
+				'caption': ['14px', { lineHeight: '1.4', fontWeight: '400' }],
+			},
+			maxWidth: {
+				'domestika': '1200px',
+			},
+			padding: {
+				'domestika': '24px',
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -52,6 +68,14 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				domestika: {
+					coral: 'hsl(var(--domestika-coral))',
+					'coral-dark': 'hsl(var(--domestika-coral-dark))',
+					green: 'hsl(var(--domestika-green))',
+					blue: 'hsl(var(--domestika-blue))',
+					'gray-light': 'hsl(var(--domestika-gray-light))',
+					'gray-medium': 'hsl(var(--domestika-gray-medium))',
+				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
@@ -66,7 +90,8 @@ export default {
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
-				sm: 'calc(var(--radius) - 4px)'
+				sm: 'calc(var(--radius) - 4px)',
+				'domestika': '8px'
 			},
 			keyframes: {
 				'accordion-down': {

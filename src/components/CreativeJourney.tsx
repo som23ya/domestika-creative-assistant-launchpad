@@ -81,33 +81,33 @@ const CreativeJourney: React.FC<CreativeJourneyProps> = ({ onBack }) => {
 
   if (showPersonalizedJourney) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50 py-4 sm:py-8 px-4">
-        <div className="max-w-4xl mx-auto modal-fade-in">
+      <div className="min-h-screen bg-white py-4 sm:py-8 px-domestika">
+        <div className="max-w-domestika mx-auto modal-fade-in">
           <Button 
             onClick={() => setShowPersonalizedJourney(false)}
             variant="ghost" 
-            className="mb-6 text-purple-600 hover:text-purple-800"
+            className="mb-6 text-domestika-coral hover:text-domestika-coral-dark hover:bg-domestika-gray-light"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Journey Options
           </Button>
 
           <div className="text-center mb-8 slide-up">
-            <h2 className="text-3xl sm:text-4xl font-bold creative-text-gradient mb-4">
+            <h2 className="text-h2 sm:text-3xl md:text-4xl font-bold domestika-text-coral mb-4">
               Personalized Skill Journey
             </h2>
-            <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto px-4">
+            <p className="text-body text-muted-foreground max-w-2xl mx-auto px-4">
               Tell us your creative interests and get personalized course recommendations and practice exercises.
             </p>
           </div>
 
-          <Card className="bg-white/90 backdrop-blur-sm border-0 shadow-2xl mb-8 scale-fade-in">
+          <Card className="domestika-card mb-8 scale-fade-in">
             <CardHeader>
-              <CardTitle className="text-2xl creative-text-gradient flex items-center">
-                <Target className="w-6 h-6 mr-2" />
+              <CardTitle className="text-xl domestika-text-coral flex items-center">
+                <Target className="w-5 h-5 mr-2" />
                 What interests you?
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-muted-foreground">
                 Enter your creative interests (e.g., "illustration", "UX design", "photography")
               </CardDescription>
             </CardHeader>
@@ -126,7 +126,7 @@ const CreativeJourney: React.FC<CreativeJourneyProps> = ({ onBack }) => {
                   <Button 
                     onClick={handlePersonalizedSubmit}
                     disabled={!userInterest.trim() || isLoading}
-                    className="creative-gradient text-white hover:opacity-90 px-6"
+                    className="domestika-button hover:bg-domestika-coral-dark px-6"
                   >
                     {isLoading ? (
                       <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
@@ -142,8 +142,8 @@ const CreativeJourney: React.FC<CreativeJourneyProps> = ({ onBack }) => {
 
               {isLoading && (
                 <div className="flex items-center justify-center py-8">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
-                  <span className="ml-3 text-gray-600">Generating personalized recommendations...</span>
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-domestika-coral"></div>
+                  <span className="ml-3 text-muted-foreground">Generating personalized recommendations...</span>
                 </div>
               )}
 
@@ -151,40 +151,40 @@ const CreativeJourney: React.FC<CreativeJourneyProps> = ({ onBack }) => {
                 <div className="mt-6">
                   {recommendations ? (
                     <div className="space-y-4">
-                      <h3 className="text-xl font-semibold creative-text-gradient mb-4">
+                      <h3 className="text-lg sm:text-xl font-bold domestika-text-coral mb-4">
                         Recommendations for "{userInterest}"
                       </h3>
                       
                       <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-4">
-                        <Card className="border border-purple-200 bg-gradient-to-br from-purple-50 to-blue-50">
+                        <Card className="domestika-card bg-domestika-gray-light">
                           <CardHeader className="pb-3">
-                            <CardTitle className="text-lg flex items-center text-purple-700">
+                            <CardTitle className="text-lg flex items-center domestika-text-coral">
                               <BookOpen className="w-5 h-5 mr-2" />
                               Recommended Course
                             </CardTitle>
                           </CardHeader>
                           <CardContent>
-                            <p className="font-medium text-gray-800">
+                            <p className="font-medium text-foreground">
                               {recommendations.course}
                             </p>
-                            <p className="text-sm text-gray-600 mt-2">
+                            <p className="text-sm text-muted-foreground mt-2">
                               A comprehensive course tailored to your interests
                             </p>
                           </CardContent>
                         </Card>
 
-                        <Card className="border border-blue-200 bg-gradient-to-br from-blue-50 to-pink-50">
+                        <Card className="domestika-card bg-accent/20">
                           <CardHeader className="pb-3">
-                            <CardTitle className="text-lg flex items-center text-blue-700">
+                            <CardTitle className="text-lg flex items-center text-domestika-blue">
                               <Target className="w-5 h-5 mr-2" />
                               Practice Exercise
                             </CardTitle>
                           </CardHeader>
                           <CardContent>
-                            <p className="font-medium text-gray-800">
+                            <p className="font-medium text-foreground">
                               {recommendations.exercise}
                             </p>
-                            <p className="text-sm text-gray-600 mt-2">
+                            <p className="text-sm text-muted-foreground mt-2">
                               Hands-on practice to develop your skills
                             </p>
                           </CardContent>
@@ -192,16 +192,16 @@ const CreativeJourney: React.FC<CreativeJourneyProps> = ({ onBack }) => {
                       </div>
                     </div>
                   ) : (
-                    <Card className="border border-orange-200 bg-gradient-to-br from-orange-50 to-yellow-50">
+                    <Card className="domestika-card bg-accent/10 border-domestika-coral/20">
                       <CardContent className="pt-6">
                         <div className="text-center">
-                          <div className="text-orange-600 mb-2">
+                          <div className="domestika-text-coral mb-2">
                             <Lightbulb className="w-8 h-8 mx-auto" />
                           </div>
-                          <p className="text-orange-800 font-medium mb-2">
+                          <p className="text-foreground font-medium mb-2">
                             Sorry, I don't have recommendations for that interest yet.
                           </p>
-                          <p className="text-orange-700 text-sm">
+                          <p className="text-muted-foreground text-sm">
                             Try "illustration", "UX design", "photography", "graphic design", or "animation"!
                           </p>
                         </div>
@@ -219,50 +219,50 @@ const CreativeJourney: React.FC<CreativeJourneyProps> = ({ onBack }) => {
 
   if (selectedCategory) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50 py-4 sm:py-8 px-4">
-        <div className="max-w-4xl mx-auto modal-fade-in">
+      <div className="min-h-screen bg-white py-4 sm:py-8 px-domestika">
+        <div className="max-w-domestika mx-auto modal-fade-in">
           <Button 
             onClick={onBack}
             variant="ghost" 
-            className="mb-6 text-purple-600 hover:text-purple-800"
+            className="mb-6 text-domestika-coral hover:text-domestika-coral-dark hover:bg-domestika-gray-light"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Home
           </Button>
 
-          <Card className="bg-white/90 backdrop-blur-sm border-0 shadow-2xl scale-fade-in">
+          <Card className="domestika-card scale-fade-in">
             <CardHeader>
-              <CardTitle className="text-2xl creative-text-gradient">
+              <CardTitle className="text-h2 domestika-text-coral">
                 Your Creative Path: {categories.find(c => c.id === selectedCategory)?.name}
               </CardTitle>
             </CardHeader>
             <CardContent>
               {isLoading ? (
                 <div className="flex items-center justify-center py-12">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
-                  <span className="ml-4 text-lg text-gray-600">Generating personalized recommendations...</span>
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-domestika-coral"></div>
+                  <span className="ml-4 text-lg text-muted-foreground">Generating personalized recommendations...</span>
                 </div>
               ) : (
                 <div className="space-y-6">
                   <div className="prose prose-lg max-w-none">
-                    <div className="bg-gradient-to-r from-purple-100 to-blue-100 p-6 rounded-xl">
-                      <pre className="whitespace-pre-wrap font-sans text-gray-800 leading-relaxed">
+                    <div className="domestika-bg-light p-6 rounded-domestika">
+                      <pre className="whitespace-pre-wrap font-domestika text-foreground leading-relaxed">
                         {aiResponse}
                       </pre>
                     </div>
                   </div>
                   
-                  <div className="flex gap-4 pt-6">
+                  <div className="flex flex-col sm:flex-row gap-4 pt-6">
                     <Button 
                       onClick={() => setSelectedCategory(null)}
                       variant="outline"
-                      className="border-purple-200 text-purple-600 hover:bg-purple-50"
+                      className="border-input text-foreground hover:bg-domestika-gray-light"
                     >
                       Explore Other Categories
                     </Button>
                     <Button 
                       onClick={() => handleCategorySelect(selectedCategory)}
-                      className="creative-gradient text-white hover:opacity-90"
+                      className="domestika-button hover:bg-domestika-coral-dark"
                     >
                       Get More Ideas
                     </Button>
@@ -277,40 +277,40 @@ const CreativeJourney: React.FC<CreativeJourneyProps> = ({ onBack }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50 py-4 sm:py-8 px-4">
-      <div className="max-w-4xl mx-auto modal-fade-in">
+    <div className="min-h-screen bg-white py-4 sm:py-8 px-domestika">
+      <div className="max-w-domestika mx-auto modal-fade-in">
         <Button 
           onClick={onBack}
           variant="ghost" 
-          className="mb-6 text-purple-600 hover:text-purple-800"
+          className="mb-6 text-domestika-coral hover:text-domestika-coral-dark hover:bg-domestika-gray-light"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Home
         </Button>
 
         <div className="text-center mb-8 sm:mb-12 slide-up">
-          <h2 className="text-3xl sm:text-4xl font-bold creative-text-gradient mb-4">
+          <h2 className="text-h2 sm:text-3xl md:text-4xl font-bold domestika-text-coral mb-4">
             Start Your Creative Journey
           </h2>
-          <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto mb-6 sm:mb-8 px-4">
+          <p className="text-body text-muted-foreground max-w-2xl mx-auto mb-6 sm:mb-8 px-4">
             Choose how you'd like to begin your creative adventure with our AI assistant.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8 sm:mb-12">
             <Button
               onClick={() => setShowPersonalizedJourney(true)}
-              className="creative-gradient text-white hover:opacity-90 transition-all duration-300 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-xl shadow-2xl transform hover:scale-105"
+              className="domestika-button hover:bg-domestika-coral-dark transition-all duration-200 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-medium rounded-domestika shadow-md transform hover:scale-105"
             >
-              <Target className="w-6 h-6 mr-2" />
+              <Target className="w-5 h-5 sm:w-6 sm:h-6 mr-2" />
               Personalized Skill Journey
             </Button>
             
             <Button
               onClick={() => {}}
               variant="outline"
-              className="border-2 border-purple-200 text-purple-700 hover:bg-purple-50 transition-all duration-300 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-xl shadow-lg transform hover:scale-105"
+              className="border-2 border-input bg-white text-foreground hover:bg-secondary transition-all duration-200 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-medium rounded-domestika shadow-md transform hover:scale-105"
             >
-              <Lightbulb className="w-6 h-6 mr-2" />
+              <Lightbulb className="w-5 h-5 sm:w-6 sm:h-6 mr-2" />
               Browse Categories
             </Button>
           </div>
@@ -320,19 +320,19 @@ const CreativeJourney: React.FC<CreativeJourneyProps> = ({ onBack }) => {
           {categories.map((category) => (
             <Card 
               key={category.id}
-              className="cursor-pointer hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border-0 bg-white/80 backdrop-blur-sm"
+              className="domestika-card cursor-pointer hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1"
               onClick={() => handleCategorySelect(category.id)}
             >
               <CardHeader className="text-center pb-4">
-                <div className={`w-16 h-16 ${category.color} rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg`}>
-                  <category.icon className="w-8 h-8 text-white" />
+                <div className={`w-12 h-12 sm:w-16 sm:h-16 ${category.color} rounded-domestika flex items-center justify-center mx-auto mb-4 shadow-sm`}>
+                  <category.icon className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                 </div>
-                <CardTitle className="text-xl font-semibold text-gray-800">
+                <CardTitle className="text-lg sm:text-xl font-bold text-foreground">
                   {category.name}
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <CardDescription className="text-center text-gray-600">
+                <CardDescription className="text-center text-muted-foreground text-sm sm:text-base">
                   Explore the world of {category.name.toLowerCase()} with AI-powered guidance and inspiration.
                 </CardDescription>
               </CardContent>
