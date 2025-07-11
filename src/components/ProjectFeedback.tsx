@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
+import { mockBackend, type FeedbackResponse } from '@/services/mockBackend';
 
 interface ProjectFeedbackProps {
   onBack: () => void;
@@ -13,69 +14,11 @@ interface ProjectFeedbackProps {
 const ProjectFeedback: React.FC<ProjectFeedbackProps> = ({ onBack }) => {
   const [projectDescription, setProjectDescription] = useState('');
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
-  const [feedback, setFeedback] = useState<string>('');
-  const [feedbackType, setFeedbackType] = useState<'positive' | 'suggestion' | ''>('');
+  const [feedbackResponse, setFeedbackResponse] = useState<FeedbackResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [feedbackGenerated, setFeedbackGenerated] = useState(false);
 
-  // Heuristics for feedback generation
-  const feedbackHeuristics = {
-    'sketch': {
-      type: 'suggestion',
-      responses: [
-        "Your sketch shows strong foundational composition! Consider adding more line weight variation to create depth and visual hierarchy. Try using thicker lines for foreground elements and thinner lines for background details.",
-        "Great character concept! To enhance your sketch, experiment with different shading techniques like cross-hatching or stippling to add texture and dimension.",
-        "Your proportions are well-balanced. For the next iteration, try adding more dynamic poses or gestures to bring more life and energy to your character."
-      ]
-    },
-    'wireframe': {
-      type: 'suggestion',
-      responses: [
-        "Your wireframe demonstrates good information architecture! Consider adding more spacing between elements for better visual breathing room and improved usability.",
-        "Solid layout structure! To enhance user experience, try incorporating more visual hierarchy through different text sizes and button prominence.",
-        "Great foundation for your interface! Consider adding breadcrumbs or navigation indicators to help users understand their location within the app flow."
-      ]
-    },
-    'illustration': {
-      type: 'positive',
-      responses: [
-        "Your illustration showcases excellent color harmony! The palette creates a cohesive mood. Consider experimenting with complementary colors for accent elements to make key areas pop.",
-        "Beautiful artistic style! Your use of light and shadow creates great depth. Try adding more contrast in focal areas to guide the viewer's eye through your composition.",
-        "Fantastic attention to detail! Your illustration has strong visual appeal. Consider adding subtle textures or patterns to enhance the overall richness of your artwork."
-      ]
-    },
-    'design': {
-      type: 'suggestion',
-      responses: [
-        "Your design concept has strong visual appeal! Consider testing different typography pairings to enhance readability and create better brand consistency.",
-        "Great use of white space! To improve accessibility, ensure your color choices meet WCAG contrast guidelines, especially for text elements.",
-        "Solid design foundation! Try experimenting with different grid systems or alignment techniques to create more dynamic and engaging layouts."
-      ]
-    },
-    'logo': {
-      type: 'positive',
-      responses: [
-        "Your logo design has strong brand potential! The concept is memorable and distinctive. Consider testing scalability at different sizes to ensure it works across all applications.",
-        "Excellent use of symbolism! Your logo effectively communicates the brand message. Try exploring monochrome versions to ensure versatility across different media.",
-        "Great typography integration! The logo has professional appeal. Consider creating variations for different use cases (horizontal, stacked, icon-only)."
-      ]
-    },
-    'photography': {
-      type: 'positive',
-      responses: [
-        "Your composition follows the rule of thirds beautifully! The lighting creates excellent mood and atmosphere. Consider experimenting with different aperture settings for varied depth of field effects.",
-        "Fantastic capture of the moment! Your timing and framing are excellent. Try exploring different perspectives or angles to add more dynamic visual interest.",
-        "Great attention to detail in your shot! The colors are vibrant and well-balanced. Consider post-processing techniques to enhance contrast and bring out more detail in shadows."
-      ]
-    }
-  };
-
-  const imageUploadFeedback = [
-    "Your uploaded image shows great visual appeal! The composition draws the viewer's eye effectively. Consider adjusting the contrast slightly to improve accessibility and make key elements more prominent.",
-    "Excellent color palette choice! The tones work harmoniously together. For your next iteration, try experimenting with different lighting angles to add more depth and dimension.",
-    "Strong visual foundation! Your image has good balance and proportion. Consider adding more texture or pattern elements to enhance visual interest and engagement.",
-    "Great attention to detail in your work! The overall aesthetic is cohesive and professional. Try exploring different cropping options to see how they affect the composition's impact."
-  ];
+  // Feedback heuristics now handled by mockBackend service
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -86,74 +29,53 @@ const ProjectFeedback: React.FC<ProjectFeedbackProps> = ({ onBack }) => {
     }
   };
 
-  const analyzeInput = () => {
-    const description = projectDescription.toLowerCase();
-    
-    // Check for keywords in description
-    for (const [keyword, feedbackData] of Object.entries(feedbackHeuristics)) {
-      if (description.includes(keyword)) {
-        const randomResponse = feedbackData.responses[Math.floor(Math.random() * feedbackData.responses.length)];
-        return {
-          feedback: randomResponse,
-          type: feedbackData.type as 'positive' | 'suggestion'
-        };
-      }
-    }
+  // Feedback analysis now handled by mockBackend service
 
-    // If image is uploaded but no matching keywords in description
-    if (uploadedFile) {
-      const randomImageFeedback = imageUploadFeedback[Math.floor(Math.random() * imageUploadFeedback.length)];
-      return {
-        feedback: randomImageFeedback,
-        type: 'positive' as const
-      };
-    }
-
-    // Fallback for unrecognized input
-    return {
-      feedback: "I'd love to provide more specific feedback! Try describing your project using keywords like 'sketch', 'wireframe', 'illustration', 'design', 'logo', or 'photography' for more targeted suggestions.",
-      type: 'suggestion' as const
-    };
-  };
-
-  const handleGetFeedback = () => {
-    if (!projectDescription.trim() && !uploadedFile) {
-      setFeedback('Please upload an image or describe your project to receive personalized feedback.');
-      setFeedbackType('suggestion');
-      setFeedbackGenerated(true);
-      return;
-    }
-
+  const handleGetFeedback = async () => {
     setIsLoading(true);
     
-    // Simulate AI processing time
-    setTimeout(() => {
-      const result = analyzeInput();
-      setFeedback(result.feedback);
-      setFeedbackType(result.type);
-      setIsLoading(false);
+    try {
+      // Use mock backend service for processing
+      const response = await mockBackend.processFeedback({
+        description: projectDescription,
+        hasImage: !!uploadedFile,
+        fileName: uploadedFile?.name
+      }, {
+        delay: 2000, // 2 second delay to simulate analysis
+        debug: true
+      });
+      
+      setFeedbackResponse(response);
       setFeedbackGenerated(true);
-    }, 2000);
+    } catch (error) {
+      console.error('[ProjectFeedback] Error processing feedback:', error);
+      setFeedbackResponse({
+        feedback: 'Sorry, there was an error processing your feedback. Please try again.',
+        type: 'suggestion'
+      });
+      setFeedbackGenerated(true);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleReset = () => {
     setProjectDescription('');
     setUploadedFile(null);
-    setFeedback('');
-    setFeedbackType('');
+    setFeedbackResponse(null);
     setFeedbackGenerated(false);
   };
 
   const getFeedbackIcon = () => {
-    return feedbackType === 'positive' ? CheckCircle : AlertTriangle;
+    return feedbackResponse?.type === 'positive' ? CheckCircle : AlertTriangle;
   };
 
   const getFeedbackColor = () => {
-    return feedbackType === 'positive' ? 'text-green-600' : 'text-orange-600';
+    return feedbackResponse?.type === 'positive' ? 'text-green-600' : 'text-orange-600';
   };
 
   const getFeedbackBgColor = () => {
-    return feedbackType === 'positive' ? 'bg-green-50 border-green-200' : 'bg-orange-50 border-orange-200';
+    return feedbackResponse?.type === 'positive' ? 'bg-green-50 border-green-200' : 'bg-orange-50 border-orange-200';
   };
 
   return (
@@ -270,7 +192,7 @@ const ProjectFeedback: React.FC<ProjectFeedbackProps> = ({ onBack }) => {
             <CardContent>
               <div className="bg-white p-6 rounded-xl border border-gray-200">
                 <p className="text-gray-800 leading-relaxed text-lg">
-                  {feedback}
+                  {feedbackResponse?.feedback}
                 </p>
               </div>
             </CardContent>

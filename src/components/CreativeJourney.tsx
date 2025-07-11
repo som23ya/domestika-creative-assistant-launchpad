@@ -5,22 +5,20 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { mockBackend, type SkillRecommendation } from '@/services/mockBackend';
 
 interface CreativeJourneyProps {
   onBack: () => void;
 }
 
-interface Recommendation {
-  course: string;
-  exercise: string;
-}
+// Using SkillRecommendation from mockBackend service
 
 const CreativeJourney: React.FC<CreativeJourneyProps> = ({ onBack }) => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [aiResponse, setAiResponse] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
   const [userInterest, setUserInterest] = useState('');
-  const [recommendations, setRecommendations] = useState<Recommendation | null>(null);
+  const [recommendations, setRecommendations] = useState<SkillRecommendation | null>(null);
   const [showPersonalizedJourney, setShowPersonalizedJourney] = useState(false);
 
   const categories = [
@@ -41,40 +39,7 @@ const CreativeJourney: React.FC<CreativeJourneyProps> = ({ onBack }) => {
     general: "💡 Ignite your creative spark with these universal principles:\n\n• Embrace constraints - they fuel creativity\n• Keep a daily creative journal or sketchbook\n• Seek inspiration from nature, architecture, and cultures\n• Don't fear failure - it's part of the creative process\n\nToday's inspiration: Create something using only 3 colors and 2 shapes!"
   };
 
-  const skillRecommendations: Record<string, Recommendation> = {
-    illustration: {
-      course: "Introduction to Digital Illustration",
-      exercise: "Create a character sketch with 3 color variations"
-    },
-    "ux design": {
-      course: "UX Design Fundamentals",
-      exercise: "Design a mobile app wireframe"
-    },
-    "ui design": {
-      course: "Modern UI Design Principles",
-      exercise: "Create a landing page mockup for a creative agency"
-    },
-    photography: {
-      course: "Portrait Photography Mastery",
-      exercise: "Take 10 portraits using natural lighting techniques"
-    },
-    "graphic design": {
-      course: "Brand Identity Design",
-      exercise: "Design a complete logo and brand guidelines"
-    },
-    animation: {
-      course: "2D Animation Basics",
-      exercise: "Create a 5-second character walking cycle"
-    },
-    "web design": {
-      course: "Responsive Web Design",
-      exercise: "Build a portfolio website from scratch"
-    },
-    painting: {
-      course: "Digital Painting Techniques",
-      exercise: "Paint a landscape using only 5 colors"
-    }
-  };
+  // Skill recommendations now handled by mockBackend service
 
   const handleCategorySelect = (categoryId: string) => {
     setSelectedCategory(categoryId);
@@ -87,24 +52,25 @@ const CreativeJourney: React.FC<CreativeJourneyProps> = ({ onBack }) => {
     }, 1500);
   };
 
-  const handlePersonalizedSubmit = () => {
+  const handlePersonalizedSubmit = async () => {
     if (!userInterest.trim()) return;
     
     setIsLoading(true);
     
-    // Simulate API call delay
-    setTimeout(() => {
-      const normalizedInterest = userInterest.toLowerCase().trim();
-      const recommendation = skillRecommendations[normalizedInterest];
+    try {
+      // Use mock backend service for processing
+      const recommendation = await mockBackend.processSkillJourney(userInterest, {
+        delay: 1000,
+        debug: true
+      });
       
-      if (recommendation) {
-        setRecommendations(recommendation);
-      } else {
-        setRecommendations(null);
-      }
-      
+      setRecommendations(recommendation);
+    } catch (error) {
+      console.error('[CreativeJourney] Error processing skill journey:', error);
+      setRecommendations(null);
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
