@@ -16,49 +16,216 @@ export interface ProcessingOptions {
   debug?: boolean;
 }
 
-// Mock data for Skill Journey recommendations
-const SKILL_RECOMMENDATIONS: Record<string, SkillRecommendation> = {
+// Enhanced creative interests database with related terms
+export interface CreativeInterest {
+  name: string;
+  relatedTerms: string[];
+  course: string;
+  exercise: string;
+}
+
+const CREATIVE_INTERESTS: Record<string, CreativeInterest> = {
   'illustration': {
+    name: 'illustration',
+    relatedTerms: ['digital illustration', 'character design', 'concept art', 'drawing', 'sketching'],
     course: 'Introduction to Digital Illustration',
     exercise: 'Create a character sketch with 3 color variations'
   },
   'ux design': {
-    course: 'UX Design Fundamentals', 
+    name: 'ux design',
+    relatedTerms: ['user experience', 'user research', 'usability', 'wireframes', 'prototyping'],
+    course: 'UX Design Fundamentals',
     exercise: 'Design a mobile app wireframe'
   },
   'ui design': {
+    name: 'ui design',
+    relatedTerms: ['user interface', 'interface design', 'app design', 'web interface'],
     course: 'Modern UI Design Principles',
     exercise: 'Create a landing page mockup for a creative agency'
   },
-  'photography': {
-    course: 'Portrait Photography Mastery',
-    exercise: 'Take 10 portraits using natural lighting techniques'
-  },
   'graphic design': {
+    name: 'graphic design',
+    relatedTerms: ['visual design', 'layout design', 'print design', 'poster design'],
     course: 'Brand Identity Design',
     exercise: 'Design a complete logo and brand guidelines'
   },
-  'animation': {
-    course: '2D Animation Basics',
-    exercise: 'Create a 5-second character walking cycle'
+  'motion design': {
+    name: 'motion design',
+    relatedTerms: ['motion graphics', 'animation', 'after effects', 'kinetic typography'],
+    course: 'Motion Graphics Mastery',
+    exercise: 'Create a 10-second animated logo reveal'
   },
   'web design': {
+    name: 'web design',
+    relatedTerms: ['website design', 'responsive design', 'frontend design', 'landing pages'],
     course: 'Responsive Web Design',
     exercise: 'Build a portfolio website from scratch'
   },
+  'product design': {
+    name: 'product design',
+    relatedTerms: ['industrial design', 'product development', 'design thinking'],
+    course: 'Product Design Fundamentals',
+    exercise: 'Design and prototype a mobile accessory'
+  },
+  'interior design': {
+    name: 'interior design',
+    relatedTerms: ['space design', 'room planning', 'architectural design', 'furniture design'],
+    course: 'Interior Design Principles',
+    exercise: 'Design a cozy living room layout'
+  },
+  'fashion design': {
+    name: 'fashion design',
+    relatedTerms: ['clothing design', 'textile design', 'fashion illustration', 'pattern making'],
+    course: 'Fashion Design Essentials',
+    exercise: 'Sketch a seasonal clothing collection'
+  },
+  'photography': {
+    name: 'photography',
+    relatedTerms: ['photo', 'camera', 'photoshoot', 'composition', 'lighting'],
+    course: 'Portrait Photography Mastery',
+    exercise: 'Take 10 portraits using natural lighting techniques'
+  },
+  'digital photography': {
+    name: 'digital photography',
+    relatedTerms: ['photo editing', 'lightroom', 'photoshop', 'image processing'],
+    course: 'Digital Photography Workshop',
+    exercise: 'Edit a photo series with consistent styling'
+  },
+  'portrait photography': {
+    name: 'portrait photography',
+    relatedTerms: ['headshots', 'people photography', 'studio lighting', 'posing'],
+    course: 'Professional Portrait Photography',
+    exercise: 'Create a portrait series with different lighting setups'
+  },
+  'animation': {
+    name: 'animation',
+    relatedTerms: ['cartoon', 'motion', 'character animation', 'storytelling'],
+    course: '2D Animation Basics',
+    exercise: 'Create a 5-second character walking cycle'
+  },
+  '3d animation': {
+    name: '3d animation',
+    relatedTerms: ['3d modeling', 'rigging', 'rendering', 'blender', 'maya'],
+    course: '3D Animation Fundamentals',
+    exercise: 'Model and animate a simple 3D character'
+  },
+  '2d animation': {
+    name: '2d animation',
+    relatedTerms: ['traditional animation', 'frame by frame', 'tweening', 'cel animation'],
+    course: '2D Animation Techniques',
+    exercise: 'Create a bouncing ball animation sequence'
+  },
+  'video editing': {
+    name: 'video editing',
+    relatedTerms: ['video production', 'montage', 'post production', 'color grading'],
+    course: 'Video Editing Masterclass',
+    exercise: 'Edit a 2-minute creative video story'
+  },
+  'music production': {
+    name: 'music production',
+    relatedTerms: ['audio production', 'sound design', 'mixing', 'mastering', 'beats'],
+    course: 'Music Production Basics',
+    exercise: 'Produce a 30-second instrumental track'
+  },
   'painting': {
+    name: 'painting',
+    relatedTerms: ['fine art', 'canvas', 'brushwork', 'color theory', 'composition'],
     course: 'Digital Painting Techniques',
     exercise: 'Paint a landscape using only 5 colors'
   },
-  'logo design': {
-    course: 'Logo Design Masterclass',
-    exercise: 'Create 3 logo variations for a tech startup'
+  'watercolor painting': {
+    name: 'watercolor painting',
+    relatedTerms: ['watercolor', 'wet on wet', 'color bleeding', 'transparency'],
+    course: 'Watercolor Fundamentals',
+    exercise: 'Paint a floral composition with watercolors'
+  },
+  'digital painting': {
+    name: 'digital painting',
+    relatedTerms: ['concept art', 'matte painting', 'photoshop painting', 'brush techniques'],
+    course: 'Digital Painting Mastery',
+    exercise: 'Create a digital environment painting'
+  },
+  'calligraphy': {
+    name: 'calligraphy',
+    relatedTerms: ['hand lettering', 'brush lettering', 'script writing', 'ink work'],
+    course: 'Modern Calligraphy Techniques',
+    exercise: 'Design a quote poster with hand lettering'
   },
   'typography': {
+    name: 'typography',
+    relatedTerms: ['font design', 'lettering', 'typeface', 'text layout', 'kerning'],
     course: 'Typography Fundamentals',
     exercise: 'Design a poster using only typographic elements'
+  },
+  'branding': {
+    name: 'branding',
+    relatedTerms: ['brand identity', 'logo design', 'brand strategy', 'visual identity'],
+    course: 'Brand Identity Design',
+    exercise: 'Create a complete brand package for a startup'
+  },
+  'creative writing': {
+    name: 'creative writing',
+    relatedTerms: ['storytelling', 'screenwriting', 'poetry', 'narrative', 'fiction'],
+    course: 'Creative Writing Workshop',
+    exercise: 'Write a 500-word short story with a twist ending'
+  },
+  'sculpture': {
+    name: 'sculpture',
+    relatedTerms: ['3d art', 'clay modeling', 'carving', 'assemblage', 'installation'],
+    course: 'Sculpture Fundamentals',
+    exercise: 'Create a small sculpture using found objects'
   }
 };
+
+// Legacy compatibility - convert to old format for existing code
+const SKILL_RECOMMENDATIONS: Record<string, SkillRecommendation> = Object.fromEntries(
+  Object.entries(CREATIVE_INTERESTS).map(([key, interest]) => [
+    key, 
+    { course: interest.course, exercise: interest.exercise }
+  ])
+);
+
+// Search function for predictive search
+export function searchCreativeInterests(query: string, limit: number = 5): string[] {
+  if (!query.trim()) return [];
+  
+  const normalizedQuery = query.toLowerCase().trim();
+  const matches: { interest: string; score: number }[] = [];
+  
+  Object.entries(CREATIVE_INTERESTS).forEach(([key, interest]) => {
+    let score = 0;
+    
+    // Exact match with interest name gets highest score
+    if (interest.name.includes(normalizedQuery)) {
+      score += interest.name === normalizedQuery ? 100 : 50;
+    }
+    
+    // Check related terms
+    interest.relatedTerms.forEach(term => {
+      if (term.includes(normalizedQuery)) {
+        score += term === normalizedQuery ? 80 : 30;
+      }
+    });
+    
+    // Partial matches get lower scores
+    if (normalizedQuery.length >= 3) {
+      if (interest.name.startsWith(normalizedQuery)) score += 40;
+      interest.relatedTerms.forEach(term => {
+        if (term.startsWith(normalizedQuery)) score += 20;
+      });
+    }
+    
+    if (score > 0) {
+      matches.push({ interest: interest.name, score });
+    }
+  });
+  
+  // Sort by score and return top matches
+  return matches
+    .sort((a, b) => b.score - a.score)
+    .slice(0, limit)
+    .map(match => match.interest);
+}
 
 // Mock data for Feedback Loop heuristics
 const FEEDBACK_HEURISTICS: Record<string, { type: 'positive' | 'suggestion'; responses: string[] }> = {

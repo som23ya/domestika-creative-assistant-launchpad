@@ -1,11 +1,11 @@
 
-import React, { useState } from 'react';
-import { ArrowLeft, Lightbulb, Palette, Camera, Code, Music, PenTool, BookOpen, Target, Send } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { ArrowLeft, Lightbulb, Palette, Camera, Code, Music, PenTool, BookOpen, Target, Send, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { mockBackend, type SkillRecommendation } from '@/services/mockBackend';
+import { mockBackend, searchCreativeInterests, type SkillRecommendation } from '@/services/mockBackend';
 
 interface CreativeJourneyProps {
   onBack: () => void;
@@ -20,6 +20,13 @@ const CreativeJourney: React.FC<CreativeJourneyProps> = ({ onBack }) => {
   const [userInterest, setUserInterest] = useState('');
   const [recommendations, setRecommendations] = useState<SkillRecommendation | null>(null);
   const [showPersonalizedJourney, setShowPersonalizedJourney] = useState(false);
+  
+  // Predictive search state
+  const [searchSuggestions, setSearchSuggestions] = useState<string[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const suggestionsRef = useRef<HTMLDivElement>(null);
 
   const categories = [
     { id: 'design', name: 'Graphic Design', icon: Palette, color: 'bg-purple-500' },
@@ -37,6 +44,76 @@ const CreativeJourney: React.FC<CreativeJourneyProps> = ({ onBack }) => {
     web: "💻 Let's build beautiful and functional web experiences:\n\n• Focus on user experience (UX) first, aesthetics second\n• Learn responsive design principles for all devices\n• Explore modern CSS techniques and animations\n• Study accessibility guidelines for inclusive design\n\nProject idea: Design a portfolio site that tells your creative story!",
     music: "🎵 Your musical creativity journey starts with these steps:\n\n• Experiment with different genres and instruments\n• Learn basic music theory to enhance your compositions\n• Use digital audio workstations (DAWs) to produce tracks\n• Collaborate with other musicians for fresh perspectives\n\nChallenge: Create a 30-second melody that captures your current mood!",
     general: "💡 Ignite your creative spark with these universal principles:\n\n• Embrace constraints - they fuel creativity\n• Keep a daily creative journal or sketchbook\n• Seek inspiration from nature, architecture, and cultures\n• Don't fear failure - it's part of the creative process\n\nToday's inspiration: Create something using only 3 colors and 2 shapes!"
+  };
+
+  // Predictive search functions
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (suggestionsRef.current && !suggestionsRef.current.contains(event.target as Node) &&
+          inputRef.current && !inputRef.current.contains(event.target as Node)) {
+        setShowSuggestions(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setUserInterest(value);
+    
+    if (value.trim().length >= 2) {
+      const suggestions = searchCreativeInterests(value, 5);
+      setSearchSuggestions(suggestions);
+      setShowSuggestions(suggestions.length > 0);
+    } else {
+      setSearchSuggestions([]);
+      setShowSuggestions(false);
+    }
+    setActiveSuggestionIndex(-1);
+  };
+
+  const handleSuggestionClick = (suggestion: string) => {
+    setUserInterest(suggestion);
+    setShowSuggestions(false);
+    setActiveSuggestionIndex(-1);
+  };
+
+  const handleInputKeyDown = (e: React.KeyboardEvent) => {
+    if (!showSuggestions) {
+      if (e.key === 'Enter') {
+        handlePersonalizedSubmit();
+      }
+      return;
+    }
+
+    switch (e.key) {
+      case 'ArrowDown':
+        e.preventDefault();
+        setActiveSuggestionIndex(prev => 
+          prev < searchSuggestions.length - 1 ? prev + 1 : 0
+        );
+        break;
+      case 'ArrowUp':
+        e.preventDefault();
+        setActiveSuggestionIndex(prev => 
+          prev > 0 ? prev - 1 : searchSuggestions.length - 1
+        );
+        break;
+      case 'Enter':
+        e.preventDefault();
+        if (activeSuggestionIndex >= 0) {
+          handleSuggestionClick(searchSuggestions[activeSuggestionIndex]);
+        } else {
+          handlePersonalizedSubmit();
+        }
+        break;
+      case 'Escape':
+        setShowSuggestions(false);
+        setActiveSuggestionIndex(-1);
+        break;
+    }
   };
 
   // Skill recommendations now handled by mockBackend service
@@ -115,14 +192,41 @@ const CreativeJourney: React.FC<CreativeJourneyProps> = ({ onBack }) => {
               <div className="space-y-2">
                 <Label htmlFor="interest">Your Creative Interest</Label>
                 <div className="flex flex-col sm:flex-row gap-2">
-                  <Input
-                    id="interest"
-                    placeholder="Enter your creative interest, like illustration or UX design"
-                    value={userInterest}
-                    onChange={(e) => setUserInterest(e.target.value)}
-                    onKeyPress={handleKeyPress}
-                    className="flex-1"
-                  />
+                  <div className="relative flex-1">
+                    <Input
+                      ref={inputRef}
+                      id="interest"
+                      placeholder="Type to search: illustration, UX design, photography..."
+                      value={userInterest}
+                      onChange={handleInputChange}
+                      onKeyDown={handleInputKeyDown}
+                      className="flex-1"
+                      autoComplete="off"
+                    />
+                    {showSuggestions && searchSuggestions.length > 0 && (
+                      <div 
+                        ref={suggestionsRef}
+                        className="absolute top-full left-0 right-0 mt-1 bg-white border border-input rounded-domestika shadow-lg z-50 max-h-60 overflow-y-auto animate-fade-in"
+                      >
+                        {searchSuggestions.map((suggestion, index) => (
+                          <button
+                            key={suggestion}
+                            onClick={() => handleSuggestionClick(suggestion)}
+                            className={`w-full text-left px-4 py-3 hover:bg-domestika-gray-light transition-colors border-b border-gray-100 last:border-b-0 ${
+                              index === activeSuggestionIndex 
+                                ? 'bg-domestika-gray-light domestika-text-coral' 
+                                : 'text-foreground'
+                            }`}
+                          >
+                            <div className="flex items-center">
+                              <Target className="w-4 h-4 mr-2 text-domestika-coral flex-shrink-0" />
+                              <span className="font-medium capitalize">{suggestion}</span>
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                   <Button 
                     onClick={handlePersonalizedSubmit}
                     disabled={!userInterest.trim() || isLoading}
