@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { ArrowLeft, Upload, FileImage, MessageSquare, Star, Lightbulb } from 'lucide-react';
+import { ArrowLeft, Upload, FileImage, MessageSquare, Star, Lightbulb, CheckCircle, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
@@ -14,26 +14,113 @@ const ProjectFeedback: React.FC<ProjectFeedbackProps> = ({ onBack }) => {
   const [projectDescription, setProjectDescription] = useState('');
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [feedback, setFeedback] = useState<string>('');
+  const [feedbackType, setFeedbackType] = useState<'positive' | 'suggestion' | ''>('');
   const [isLoading, setIsLoading] = useState(false);
   const [feedbackGenerated, setFeedbackGenerated] = useState(false);
 
-  const mockFeedbacks = [
-    "🎨 **Overall Impression**: Your project shows great potential! The composition is well-balanced and your color choices create a harmonious visual flow.\n\n**Strengths**:\n• Strong use of contrast to draw attention\n• Good understanding of visual hierarchy\n• Creative approach to the subject matter\n\n**Areas for Improvement**:\n• Consider refining the typography for better readability\n• The background could use more breathing space\n• Try experimenting with different lighting angles\n\n**Next Steps**: Focus on simplifying complex elements and emphasizing your strongest design choices. Great work overall! 🌟",
-    
-    "📸 **Creative Analysis**: This project demonstrates solid technical skills with room for artistic growth!\n\n**What's Working Well**:\n• Excellent attention to detail\n• Strong foundational techniques\n• Clear creative vision coming through\n\n**Enhancement Opportunities**:\n• Push the creative boundaries further\n• Consider the emotional impact on viewers\n• Experiment with unconventional approaches\n\n**Recommendation**: Try creating 3 variations of this concept to explore different creative directions. Your technical foundation is strong - now let your creativity soar! ✨",
-    
-    "🚀 **Project Evaluation**: You're on an exciting creative path! This work shows both technical competence and artistic intuition.\n\n**Highlights**:\n• Innovative problem-solving approach\n• Good grasp of design principles\n• Unique perspective that sets it apart\n\n**Growth Areas**:\n• Refine the execution of your strongest ideas\n• Consider the user/viewer experience more deeply\n• Balance complexity with clarity\n\n**Action Plan**: Focus your next iteration on amplifying what makes this project uniquely yours. Consider studying similar works by established artists for inspiration! 🎯"
+  // Heuristics for feedback generation
+  const feedbackHeuristics = {
+    'sketch': {
+      type: 'suggestion',
+      responses: [
+        "Your sketch shows strong foundational composition! Consider adding more line weight variation to create depth and visual hierarchy. Try using thicker lines for foreground elements and thinner lines for background details.",
+        "Great character concept! To enhance your sketch, experiment with different shading techniques like cross-hatching or stippling to add texture and dimension.",
+        "Your proportions are well-balanced. For the next iteration, try adding more dynamic poses or gestures to bring more life and energy to your character."
+      ]
+    },
+    'wireframe': {
+      type: 'suggestion',
+      responses: [
+        "Your wireframe demonstrates good information architecture! Consider adding more spacing between elements for better visual breathing room and improved usability.",
+        "Solid layout structure! To enhance user experience, try incorporating more visual hierarchy through different text sizes and button prominence.",
+        "Great foundation for your interface! Consider adding breadcrumbs or navigation indicators to help users understand their location within the app flow."
+      ]
+    },
+    'illustration': {
+      type: 'positive',
+      responses: [
+        "Your illustration showcases excellent color harmony! The palette creates a cohesive mood. Consider experimenting with complementary colors for accent elements to make key areas pop.",
+        "Beautiful artistic style! Your use of light and shadow creates great depth. Try adding more contrast in focal areas to guide the viewer's eye through your composition.",
+        "Fantastic attention to detail! Your illustration has strong visual appeal. Consider adding subtle textures or patterns to enhance the overall richness of your artwork."
+      ]
+    },
+    'design': {
+      type: 'suggestion',
+      responses: [
+        "Your design concept has strong visual appeal! Consider testing different typography pairings to enhance readability and create better brand consistency.",
+        "Great use of white space! To improve accessibility, ensure your color choices meet WCAG contrast guidelines, especially for text elements.",
+        "Solid design foundation! Try experimenting with different grid systems or alignment techniques to create more dynamic and engaging layouts."
+      ]
+    },
+    'logo': {
+      type: 'positive',
+      responses: [
+        "Your logo design has strong brand potential! The concept is memorable and distinctive. Consider testing scalability at different sizes to ensure it works across all applications.",
+        "Excellent use of symbolism! Your logo effectively communicates the brand message. Try exploring monochrome versions to ensure versatility across different media.",
+        "Great typography integration! The logo has professional appeal. Consider creating variations for different use cases (horizontal, stacked, icon-only)."
+      ]
+    },
+    'photography': {
+      type: 'positive',
+      responses: [
+        "Your composition follows the rule of thirds beautifully! The lighting creates excellent mood and atmosphere. Consider experimenting with different aperture settings for varied depth of field effects.",
+        "Fantastic capture of the moment! Your timing and framing are excellent. Try exploring different perspectives or angles to add more dynamic visual interest.",
+        "Great attention to detail in your shot! The colors are vibrant and well-balanced. Consider post-processing techniques to enhance contrast and bring out more detail in shadows."
+      ]
+    }
+  };
+
+  const imageUploadFeedback = [
+    "Your uploaded image shows great visual appeal! The composition draws the viewer's eye effectively. Consider adjusting the contrast slightly to improve accessibility and make key elements more prominent.",
+    "Excellent color palette choice! The tones work harmoniously together. For your next iteration, try experimenting with different lighting angles to add more depth and dimension.",
+    "Strong visual foundation! Your image has good balance and proportion. Consider adding more texture or pattern elements to enhance visual interest and engagement.",
+    "Great attention to detail in your work! The overall aesthetic is cohesive and professional. Try exploring different cropping options to see how they affect the composition's impact."
   ];
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) {
+    if (file && (file.type === 'image/jpeg' || file.type === 'image/png')) {
       setUploadedFile(file);
+    } else if (file) {
+      alert('Please upload only .jpg or .png files');
     }
   };
 
-  const handleGenerateFeedback = () => {
+  const analyzeInput = () => {
+    const description = projectDescription.toLowerCase();
+    
+    // Check for keywords in description
+    for (const [keyword, feedbackData] of Object.entries(feedbackHeuristics)) {
+      if (description.includes(keyword)) {
+        const randomResponse = feedbackData.responses[Math.floor(Math.random() * feedbackData.responses.length)];
+        return {
+          feedback: randomResponse,
+          type: feedbackData.type as 'positive' | 'suggestion'
+        };
+      }
+    }
+
+    // If image is uploaded but no matching keywords in description
+    if (uploadedFile) {
+      const randomImageFeedback = imageUploadFeedback[Math.floor(Math.random() * imageUploadFeedback.length)];
+      return {
+        feedback: randomImageFeedback,
+        type: 'positive' as const
+      };
+    }
+
+    // Fallback for unrecognized input
+    return {
+      feedback: "I'd love to provide more specific feedback! Try describing your project using keywords like 'sketch', 'wireframe', 'illustration', 'design', 'logo', or 'photography' for more targeted suggestions.",
+      type: 'suggestion' as const
+    };
+  };
+
+  const handleGetFeedback = () => {
     if (!projectDescription.trim() && !uploadedFile) {
+      setFeedback('Please upload an image or describe your project to receive personalized feedback.');
+      setFeedbackType('suggestion');
+      setFeedbackGenerated(true);
       return;
     }
 
@@ -41,8 +128,9 @@ const ProjectFeedback: React.FC<ProjectFeedbackProps> = ({ onBack }) => {
     
     // Simulate AI processing time
     setTimeout(() => {
-      const randomFeedback = mockFeedbacks[Math.floor(Math.random() * mockFeedbacks.length)];
-      setFeedback(randomFeedback);
+      const result = analyzeInput();
+      setFeedback(result.feedback);
+      setFeedbackType(result.type);
       setIsLoading(false);
       setFeedbackGenerated(true);
     }, 2000);
@@ -52,7 +140,20 @@ const ProjectFeedback: React.FC<ProjectFeedbackProps> = ({ onBack }) => {
     setProjectDescription('');
     setUploadedFile(null);
     setFeedback('');
+    setFeedbackType('');
     setFeedbackGenerated(false);
+  };
+
+  const getFeedbackIcon = () => {
+    return feedbackType === 'positive' ? CheckCircle : AlertTriangle;
+  };
+
+  const getFeedbackColor = () => {
+    return feedbackType === 'positive' ? 'text-green-600' : 'text-orange-600';
+  };
+
+  const getFeedbackBgColor = () => {
+    return feedbackType === 'positive' ? 'bg-green-50 border-green-200' : 'bg-orange-50 border-orange-200';
   };
 
   return (
@@ -69,10 +170,10 @@ const ProjectFeedback: React.FC<ProjectFeedbackProps> = ({ onBack }) => {
 
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold creative-text-gradient mb-4">
-            Upload Project for Feedback
+            Intelligent Feedback Loop
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Get personalized, constructive feedback on your creative work from our AI assistant. Upload your project and describe your goals.
+            Upload your creative work or describe your project to receive AI-powered insights and personalized feedback to enhance your skills.
           </p>
         </div>
 
@@ -86,7 +187,7 @@ const ProjectFeedback: React.FC<ProjectFeedbackProps> = ({ onBack }) => {
                   Upload Your Project
                 </CardTitle>
                 <CardDescription>
-                  Share your creative work for detailed analysis and feedback
+                  Share images (.jpg, .png) of your creative work for visual analysis
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
@@ -95,16 +196,16 @@ const ProjectFeedback: React.FC<ProjectFeedbackProps> = ({ onBack }) => {
                     type="file"
                     id="fileUpload"
                     className="hidden"
-                    accept="image/*,video/*,.pdf,.psd,.ai,.sketch"
+                    accept=".jpg,.jpeg,.png"
                     onChange={handleFileUpload}
                   />
                   <label htmlFor="fileUpload" className="cursor-pointer">
                     <FileImage className="w-12 h-12 text-purple-400 mx-auto mb-4" />
                     <p className="text-lg font-medium text-gray-700 mb-2">
-                      Drop your file here or click to browse
+                      Drop your image here or click to browse
                     </p>
                     <p className="text-sm text-gray-500">
-                      Supports images, videos, PDFs, and design files
+                      Supports JPG and PNG files
                     </p>
                   </label>
                 </div>
@@ -130,45 +231,47 @@ const ProjectFeedback: React.FC<ProjectFeedbackProps> = ({ onBack }) => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-xl text-gray-800">
                   <MessageSquare className="w-5 h-5 text-blue-600" />
-                  Project Description
+                  Describe Your Project
                 </CardTitle>
                 <CardDescription>
-                  Tell us about your project, goals, and specific areas you'd like feedback on
+                  Tell us about your creative work for more targeted feedback
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <Textarea
-                  placeholder="Describe your project... What were you trying to achieve? What challenges did you face? What specific feedback are you looking for?"
+                  placeholder="Describe your project... (e.g., 'This is a character sketch', 'A wireframe for a mobile app', 'Logo design for a bakery')"
                   value={projectDescription}
                   onChange={(e) => setProjectDescription(e.target.value)}
                   className="min-h-[200px] resize-none border-purple-200 focus:border-purple-400"
                 />
                 
                 <div className="mt-6 flex flex-wrap gap-2">
-                  <Badge variant="secondary" className="text-xs">Visual Design</Badge>
-                  <Badge variant="secondary" className="text-xs">User Experience</Badge>
-                  <Badge variant="secondary" className="text-xs">Technical Implementation</Badge>
-                  <Badge variant="secondary" className="text-xs">Creative Direction</Badge>
+                  <Badge variant="secondary" className="text-xs">Sketch</Badge>
+                  <Badge variant="secondary" className="text-xs">Wireframe</Badge>
+                  <Badge variant="secondary" className="text-xs">Illustration</Badge>
+                  <Badge variant="secondary" className="text-xs">Design</Badge>
+                  <Badge variant="secondary" className="text-xs">Logo</Badge>
+                  <Badge variant="secondary" className="text-xs">Photography</Badge>
                 </div>
               </CardContent>
             </Card>
           </div>
         ) : (
-          <Card className="bg-white/90 backdrop-blur-sm border-0 shadow-2xl">
+          <Card className={`bg-white/90 backdrop-blur-sm border-2 shadow-2xl ${getFeedbackBgColor()}`}>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-2xl creative-text-gradient">
-                <Star className="w-6 h-6 text-yellow-500" />
-                Your Personalized Feedback
+              <CardTitle className="flex items-center gap-2 text-2xl text-gray-800">
+                {React.createElement(getFeedbackIcon(), { className: `w-6 h-6 ${getFeedbackColor()}` })}
+                Your Intelligent Feedback
               </CardTitle>
               <CardDescription>
-                Detailed analysis and recommendations for your creative project
+                AI-powered insights based on your project analysis
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="bg-gradient-to-r from-blue-100 to-purple-100 p-6 rounded-xl">
-                <pre className="whitespace-pre-wrap font-sans text-gray-800 leading-relaxed">
+              <div className="bg-white p-6 rounded-xl border border-gray-200">
+                <p className="text-gray-800 leading-relaxed text-lg">
                   {feedback}
-                </pre>
+                </p>
               </div>
             </CardContent>
           </Card>
@@ -178,8 +281,8 @@ const ProjectFeedback: React.FC<ProjectFeedbackProps> = ({ onBack }) => {
         <div className="mt-8 flex justify-center gap-4">
           {!feedbackGenerated ? (
             <Button
-              onClick={handleGenerateFeedback}
-              disabled={!projectDescription.trim() && !uploadedFile || isLoading}
+              onClick={handleGetFeedback}
+              disabled={isLoading}
               className="creative-gradient text-white hover:opacity-90 px-8 py-3 text-lg"
             >
               {isLoading ? (
@@ -190,7 +293,7 @@ const ProjectFeedback: React.FC<ProjectFeedbackProps> = ({ onBack }) => {
               ) : (
                 <>
                   <Lightbulb className="w-5 h-5 mr-2" />
-                  Get AI Feedback
+                  Get Feedback
                 </>
               )}
             </Button>
@@ -204,7 +307,7 @@ const ProjectFeedback: React.FC<ProjectFeedbackProps> = ({ onBack }) => {
                 Upload Another Project
               </Button>
               <Button
-                onClick={handleGenerateFeedback}
+                onClick={handleGetFeedback}
                 className="creative-gradient text-white hover:opacity-90 px-6"
               >
                 Get More Feedback
