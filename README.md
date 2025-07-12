@@ -1,4 +1,4 @@
-# Welcome to your Lovable project
+Domestika Creative AI Asssitant - A lovable App
 
 ## Project info
 
