@@ -2,7 +2,7 @@
 import React from 'react';
 import { ExternalLink, LogIn, LogOut, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { DOMESTIKA_CATEGORIES } from '@/services/domestikaService';
 
@@ -24,11 +24,17 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
   onSignOut
 }) => {
   const { user, loading } = useAuth();
+  const navigate = useNavigate();
 
-  const navItems = [
-    { label: 'Start Creative Journey', href: '/' },
-    { label: 'Upload Project Feedback', href: '/feedback' },
-  ];
+  const handleStartJourney = () => {
+    navigate('/?view=journey');
+    onClose();
+  };
+
+  const handleUploadFeedback = () => {
+    navigate('/?view=feedback');
+    onClose();
+  };
 
   const handleCategorySelect = (categorySlug: string) => {
     if (onCategorySelect) {
@@ -42,13 +48,21 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
   return (
     <div className="md:hidden mt-4 pt-4 border-t border-border">
       <div className="flex flex-col space-y-2">
-        {navItems.map((item) => (
-          <Link key={item.href} to={item.href} onClick={onClose}>
-            <Button variant="ghost" className="w-full justify-start">
-              {item.label}
-            </Button>
-          </Link>
-        ))}
+        <Button 
+          variant="ghost" 
+          className="w-full justify-start"
+          onClick={handleStartJourney}
+        >
+          Start Creative Journey
+        </Button>
+        
+        <Button 
+          variant="ghost" 
+          className="w-full justify-start"
+          onClick={handleUploadFeedback}
+        >
+          Upload Project Feedback
+        </Button>
         
         {/* Mobile Categories */}
         <div className="border-t border-border pt-2 mt-2">

@@ -2,7 +2,7 @@
 import React from 'react';
 import { ExternalLink, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,10 +16,15 @@ interface HeaderNavigationProps {
 }
 
 const HeaderNavigation: React.FC<HeaderNavigationProps> = ({ onCategorySelect }) => {
-  const navItems = [
-    { label: 'Start Creative Journey', href: '/', icon: null },
-    { label: 'Upload Project Feedback', href: '/feedback', icon: ExternalLink },
-  ];
+  const navigate = useNavigate();
+
+  const handleStartJourney = () => {
+    navigate('/?view=journey');
+  };
+
+  const handleUploadFeedback = () => {
+    navigate('/?view=feedback');
+  };
 
   const handleCategorySelect = (categorySlug: string) => {
     if (onCategorySelect) {
@@ -29,13 +34,22 @@ const HeaderNavigation: React.FC<HeaderNavigationProps> = ({ onCategorySelect })
 
   return (
     <div className="hidden md:flex items-center space-x-4">
-      {navItems.map((item) => (
-        <Link key={item.href} to={item.href}>
-          <Button variant="ghost" className="text-foreground hover:text-primary">
-            {item.label}
-          </Button>
-        </Link>
-      ))}
+      <Button 
+        variant="ghost" 
+        className="text-foreground hover:text-primary"
+        onClick={handleStartJourney}
+      >
+        Start Creative Journey
+      </Button>
+      
+      <Button 
+        variant="ghost" 
+        className="text-foreground hover:text-primary"
+        onClick={handleUploadFeedback}
+      >
+        <ExternalLink className="w-4 h-4 mr-2" />
+        Upload Project Feedback
+      </Button>
       
       {/* Browse Categories Dropdown */}
       <DropdownMenu>

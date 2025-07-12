@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Sparkles, ArrowRight, Users, Award, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -8,9 +7,14 @@ import CreativeJourney from '@/components/CreativeJourney';
 import ProjectFeedback from '@/components/ProjectFeedback';
 import CourseGrid from '@/components/CourseGrid';
 import { domestikaService, DomestikaCourse } from '@/services/domestikaService';
+import { useSearchParams } from 'react-router-dom';
 
 const Index = () => {
-  const [currentView, setCurrentView] = useState<'home' | 'journey' | 'feedback'>('home');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const viewParam = searchParams.get('view');
+  const [currentView, setCurrentView] = useState<'home' | 'journey' | 'feedback'>(
+    viewParam === 'journey' ? 'journey' : viewParam === 'feedback' ? 'feedback' : 'home'
+  );
   const [recommendedCourses, setRecommendedCourses] = useState<DomestikaCourse[]>([]);
   const [filteredCourses, setFilteredCourses] = useState<DomestikaCourse[]>([]);
   const [coursesLoading, setCoursesLoading] = useState(true);
@@ -38,6 +42,18 @@ const Index = () => {
       description: 'Break through creative blocks with AI-generated ideas and prompts.'
     }
   ];
+
+  // Update view when URL params change
+  useEffect(() => {
+    const view = searchParams.get('view');
+    if (view === 'journey') {
+      setCurrentView('journey');
+    } else if (view === 'feedback') {
+      setCurrentView('feedback');
+    } else {
+      setCurrentView('home');
+    }
+  }, [searchParams]);
 
   // Load recommended courses on component mount
   useEffect(() => {
@@ -85,8 +101,13 @@ const Index = () => {
     }
   };
 
+  const handleBackToHome = () => {
+    setSearchParams({});
+    setCurrentView('home');
+  };
+
   if (currentView === 'journey') {
-    return <CreativeJourney onBack={() => setCurrentView('home')} />;
+    return <CreativeJourney onBack={handleBackToHome} />;
   }
 
   if (currentView === 'feedback') {
@@ -95,7 +116,7 @@ const Index = () => {
         <Header onCategorySelect={handleCategorySelect} />
         <div className="py-8 px-domestika">
           <div className="max-w-domestika mx-auto">
-            <ProjectFeedback onBack={() => setCurrentView('home')} />
+            <ProjectFeedback onBack={handleBackToHome} />
           </div>
         </div>
       </div>
@@ -139,7 +160,10 @@ const Index = () => {
           {/* Main Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16 fade-in-up">
             <Button
-              onClick={() => setCurrentView('journey')}
+              onClick={() => {
+                setSearchParams({ view: 'journey' });
+                setCurrentView('journey');
+              }}
               className="domestika-gradient text-white hover:bg-domestika-coral-dark transition-all duration-200 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-medium rounded-domestika shadow-md transform hover:scale-105"
             >
               <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 mr-2" />
@@ -148,7 +172,10 @@ const Index = () => {
             </Button>
             
             <Button
-              onClick={() => setCurrentView('feedback')}
+              onClick={() => {
+                setSearchParams({ view: 'feedback' });
+                setCurrentView('feedback');
+              }}
               variant="outline"
               className="border-2 border-input bg-white text-foreground hover:bg-secondary transition-all duration-200 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-medium rounded-domestika shadow-md transform hover:scale-105"
             >
