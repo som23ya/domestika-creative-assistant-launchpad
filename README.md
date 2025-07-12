@@ -34,6 +34,25 @@ npm i
 
 # Step 4: Start the development server with auto-reloading and an instant preview.
 npm run dev
+
+# Step 5: Configure Environment:
+- Create .env with:
+REACT_APP_SUPABASE_URL=your_supabase_url
+REACT_APP_SUPABASE_ANON_KEY=your_supabase_anon_key
+REACT_APP_DOMESTIKA_API_KEY=your_domestika_api_key (or use mock).
+
+# Step 6: Set Up Supabase:
+Start local Supabase: supabase start.
+Apply migrations: supabase db push.
+Seed data: supabase db seed.
+
+# Step 7:Run the App:
+Start the frontend: npm run dev.
+Access at http://localhost:5173.
+Ensure Docker is running for Supabase.
+
+# Step 8: Test Features:
+Configure src/utils/mock-llm.js for AI feedback and peer-matching simulations.
 ```
 
 **Edit a file directly in GitHub**
@@ -64,10 +83,24 @@ This project is built with:
 
 Simply open [Lovable](https://lovable.dev/projects/cabc4306-4198-4351-b161-30820db41197) and click on Share -> Publish.
 
-## Can I connect a custom domain to my Lovable project?
+## **Known Gaps**
 
-Yes, you can!
+- Mock LLM Limits: Feedback and peer-matching lack depth; real LLM planned for month 7.
+- Scalability: Supabase may lag at 1M+ MAUs; caching pending.
+- Language Support: English/Spanish only; broader support targeted for month 6.
+- Mobile App: No native app yet; mobile UI in progress for month 12.
+- Safety: Heuristic moderation needs manual review; enhancements underway.
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+
+## **Next Experiments**
+- Advanced Feedback: Test real LLM (e.g., Claude) by month 7 for better critiques.
+- Points Tuning: A/B test points (e.g., 20 vs. 30 for reviews) to boost engagement.
+- Community Forum: Pilot a discussion board by month 9 for peer connections.
+- Mobile Launch: Develop iOS/Android apps by month 12 with notifications.
+- Localized UI: Experiment with Hindi/English for Indian users by month 6.
+
+
+
+## **Contribute:**
+Submit issues or PRs on GitHub to enhance creative learning!
