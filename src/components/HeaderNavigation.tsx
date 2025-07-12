@@ -36,7 +36,7 @@ const HeaderNavigation: React.FC<HeaderNavigationProps> = ({ onCategorySelect })
     <div className="hidden md:flex items-center space-x-4">
       <Button 
         variant="ghost" 
-        className="text-foreground hover:text-primary"
+        className="text-foreground hover:text-domestika-coral hover:bg-domestika-gray-light"
         onClick={handleStartJourney}
       >
         Start Creative Journey
@@ -44,7 +44,7 @@ const HeaderNavigation: React.FC<HeaderNavigationProps> = ({ onCategorySelect })
       
       <Button 
         variant="ghost" 
-        className="text-foreground hover:text-primary"
+        className="text-foreground hover:text-domestika-coral hover:bg-domestika-gray-light"
         onClick={handleUploadFeedback}
       >
         <ExternalLink className="w-4 h-4 mr-2" />
@@ -56,7 +56,7 @@ const HeaderNavigation: React.FC<HeaderNavigationProps> = ({ onCategorySelect })
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
-            className="text-foreground hover:text-primary"
+            className="text-foreground hover:text-domestika-coral hover:bg-domestika-gray-light"
           >
             Browse Categories
             <ChevronDown className="w-4 h-4 ml-2" />

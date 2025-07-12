@@ -50,7 +50,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
       <div className="flex flex-col space-y-2">
         <Button 
           variant="ghost" 
-          className="w-full justify-start"
+          className="w-full justify-start hover:text-domestika-coral hover:bg-domestika-gray-light"
           onClick={handleStartJourney}
         >
           Start Creative Journey
@@ -58,7 +58,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
         
         <Button 
           variant="ghost" 
-          className="w-full justify-start"
+          className="w-full justify-start hover:text-domestika-coral hover:bg-domestika-gray-light"
           onClick={handleUploadFeedback}
         >
           Upload Project Feedback
@@ -72,7 +72,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
               <Button
                 key={category.id}
                 variant="ghost"
-                className="w-full justify-start text-sm"
+                className="w-full justify-start text-sm hover:text-domestika-coral hover:bg-domestika-gray-light"
                 onClick={() => handleCategorySelect(category.slug)}
               >
                 {category.name}
@@ -108,7 +108,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
                 onClose();
               }}
               variant="ghost"
-              className="justify-start"
+              className="justify-start hover:text-domestika-coral hover:bg-domestika-gray-light"
             >
               <User className="w-4 h-4 mr-2" />
               Profile
@@ -119,7 +119,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
                 onClose();
               }}
               variant="ghost"
-              className="justify-start"
+              className="justify-start hover:text-domestika-coral hover:bg-domestika-gray-light"
             >
               <LogOut className="w-4 h-4 mr-2" />
               Sign Out
