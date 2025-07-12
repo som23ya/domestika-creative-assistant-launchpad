@@ -2,19 +2,9 @@ Domestika Creative AI Assitant - A lovable App
 
 ## Project info
 
-**URL**: https://lovable.dev/projects/cabc4306-4198-4351-b161-30820db41197
+**URL**: https://domestika-creative-assistant-launchpad.lovable.app/
 
-## How can I edit this code?
-
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/cabc4306-4198-4351-b161-30820db41197) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
+**Use your preferred IDE for cloning this repo**
 
 If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
 
