@@ -56,6 +56,7 @@ const UserActions = () => {
   return (
     <>
       <div className="flex items-center space-x-2">
+        {/* Points Button - Always visible when user is logged in */}
         {user && (
           <Button
             onClick={() => setShowPointsModal(true)}

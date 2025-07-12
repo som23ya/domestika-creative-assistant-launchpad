@@ -33,7 +33,7 @@ const HeaderNavigation: React.FC<HeaderNavigationProps> = ({ onCategorySelect })
   };
 
   return (
-    <div className="hidden md:flex items-center space-x-4">
+    <div className="hidden md:flex items-center space-x-3">
       <Button 
         variant="ghost" 
         className="text-foreground hover:text-domestika-coral hover:bg-domestika-gray-light"
