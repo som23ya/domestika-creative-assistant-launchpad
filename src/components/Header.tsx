@@ -47,14 +47,14 @@ const Header: React.FC<HeaderProps> = ({ onCategorySelect }) => {
 
             <HeaderNavigation onCategorySelect={onCategorySelect} />
 
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
               <UserActions />
 
               {/* Mobile Menu Button */}
               <Button
                 variant="ghost"
                 size="sm"
-                className="md:hidden"
+                className="md:hidden ml-2"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               >
                 {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}

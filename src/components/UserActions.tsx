@@ -55,17 +55,20 @@ const UserActions = () => {
 
   return (
     <>
-      <div className="hidden md:flex items-center space-x-2">
+      <div className="flex items-center space-x-2">
+        {user && (
+          <Button
+            onClick={() => setShowPointsModal(true)}
+            variant="ghost"
+            className="text-foreground hover:text-domestika-coral hover:bg-domestika-gray-light"
+          >
+            <Trophy className="w-4 h-4 mr-2" />
+            {totalPoints} Points
+          </Button>
+        )}
+        
         {user ? (
-          <>
-            <Button
-              onClick={() => setShowPointsModal(true)}
-              variant="ghost"
-              className="text-foreground hover:text-domestika-coral hover:bg-domestika-gray-light"
-            >
-              <Trophy className="w-4 h-4 mr-2" />
-              {totalPoints} Points
-            </Button>
+          <div className="hidden md:flex items-center space-x-2">
             <Button
               onClick={() => setShowActivityModal(true)}
               variant="ghost"
@@ -82,7 +85,7 @@ const UserActions = () => {
               <LogOut className="w-4 h-4 mr-2" />
               Sign Out
             </Button>
-          </>
+          </div>
         ) : (
           <Button
             onClick={() => setShowLoginModal(true)}
