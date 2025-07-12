@@ -10,6 +10,8 @@ export interface DomestikaCourse {
   students: number;
   duration: string;
   level: string;
+  url: string;
+  price: string;
 }
 
 export interface DomestikaCategory {
@@ -50,7 +52,9 @@ const MOCK_COURSES: DomestikaCourse[] = [
     rating: 4.8,
     students: 15420,
     duration: '3h 45m',
-    level: 'Beginner'
+    level: 'Beginner',
+    url: 'https://www.domestika.org/en/courses/1/introduction-to-adobe-photoshop',
+    price: '$49'
   },
   {
     id: '2',
@@ -62,7 +66,9 @@ const MOCK_COURSES: DomestikaCourse[] = [
     rating: 4.9,
     students: 28350,
     duration: '4h 20m',
-    level: 'Beginner'
+    level: 'Beginner',
+    url: 'https://www.domestika.org/en/courses/2/drawing-for-beginners',
+    price: '$39'
   },
   {
     id: '3',
@@ -74,7 +80,9 @@ const MOCK_COURSES: DomestikaCourse[] = [
     rating: 4.7,
     students: 12180,
     duration: '5h 15m',
-    level: 'Intermediate'
+    level: 'Intermediate',
+    url: 'https://www.domestika.org/en/courses/3/ux-design-fundamentals',
+    price: '$59'
   },
   {
     id: '4',
@@ -86,7 +94,9 @@ const MOCK_COURSES: DomestikaCourse[] = [
     rating: 4.8,
     students: 19720,
     duration: '6h 30m',
-    level: 'Beginner'
+    level: 'Beginner',
+    url: 'https://www.domestika.org/en/courses/4/digital-photography-essentials',
+    price: '$69'
   },
   {
     id: '5',
@@ -98,7 +108,9 @@ const MOCK_COURSES: DomestikaCourse[] = [
     rating: 4.9,
     students: 8940,
     duration: '4h 45m',
-    level: 'Intermediate'
+    level: 'Intermediate',
+    url: 'https://www.domestika.org/en/courses/5/brand-identity-design',
+    price: '$79'
   },
   {
     id: '6',
@@ -110,7 +122,9 @@ const MOCK_COURSES: DomestikaCourse[] = [
     rating: 4.6,
     students: 16230,
     duration: '3h 20m',
-    level: 'Beginner'
+    level: 'Beginner',
+    url: 'https://www.domestika.org/en/courses/6/watercolor-illustration-techniques',
+    price: '$45'
   },
   {
     id: '7',
@@ -122,7 +136,9 @@ const MOCK_COURSES: DomestikaCourse[] = [
     rating: 4.7,
     students: 11560,
     duration: '7h 15m',
-    level: 'Advanced'
+    level: 'Advanced',
+    url: 'https://www.domestika.org/en/courses/7/motion-graphics-with-after-effects',
+    price: '$89'
   },
   {
     id: '8',
@@ -134,7 +150,9 @@ const MOCK_COURSES: DomestikaCourse[] = [
     rating: 4.8,
     students: 13470,
     duration: '4h 10m',
-    level: 'Intermediate'
+    level: 'Intermediate',
+    url: 'https://www.domestika.org/en/courses/8/typography-fundamentals',
+    price: '$55'
   },
   {
     id: '9',
@@ -146,7 +164,9 @@ const MOCK_COURSES: DomestikaCourse[] = [
     rating: 4.5,
     students: 9820,
     duration: '5h 25m',
-    level: 'Intermediate'
+    level: 'Intermediate',
+    url: 'https://www.domestika.org/en/courses/9/product-photography',
+    price: '$65'
   },
   {
     id: '10',
@@ -158,7 +178,9 @@ const MOCK_COURSES: DomestikaCourse[] = [
     rating: 4.9,
     students: 7540,
     duration: '3h 50m',
-    level: 'Beginner'
+    level: 'Beginner',
+    url: 'https://www.domestika.org/en/courses/10/ceramic-hand-building',
+    price: '$42'
   }
 ];
 

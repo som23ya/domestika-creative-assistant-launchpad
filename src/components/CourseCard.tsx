@@ -7,11 +7,16 @@ import { DomestikaCourse } from '@/services/domestikaService';
 
 interface CourseCardProps {
   course: DomestikaCourse;
+  onClick?: () => void;
 }
 
-const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
+const CourseCard: React.FC<CourseCardProps> = ({ course, onClick }) => {
   const handleCourseClick = () => {
-    window.open(course.url, '_blank');
+    if (onClick) {
+      onClick();
+    } else {
+      window.open(course.url, '_blank');
+    }
   };
 
   return (
