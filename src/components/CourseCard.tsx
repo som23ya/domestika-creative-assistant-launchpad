@@ -2,76 +2,71 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Star, Users, Clock } from 'lucide-react';
+import { Clock, Users, Star } from 'lucide-react';
 import { DomestikaCourse } from '@/services/domestikaService';
 
 interface CourseCardProps {
   course: DomestikaCourse;
-  onClick?: () => void;
 }
 
-const CourseCard: React.FC<CourseCardProps> = ({ course, onClick }) => {
+const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
+  const handleCourseClick = () => {
+    window.open(course.url, '_blank');
+  };
+
   return (
     <Card 
-      className="domestika-card cursor-pointer hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1 h-full"
-      onClick={onClick}
+      className="domestika-card hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1 cursor-pointer"
+      onClick={handleCourseClick}
     >
-      <div className="aspect-video bg-domestika-gray-light rounded-t-lg flex items-center justify-center">
+      <div className="aspect-video bg-domestika-gray-light rounded-t-domestika overflow-hidden">
         <img 
           src={course.thumbnail} 
           alt={course.title}
-          className="w-full h-full object-cover rounded-t-lg"
+          className="w-full h-full object-cover"
           onError={(e) => {
             const target = e.target as HTMLImageElement;
-            target.style.display = 'none';
-            target.parentElement!.innerHTML = `
-              <div class="w-full h-full flex items-center justify-center bg-domestika-gray-light">
-                <span class="text-muted-foreground text-sm">Course Thumbnail</span>
-              </div>
-            `;
+            target.src = '/placeholder.svg';
           }}
         />
       </div>
       
       <CardHeader className="pb-3">
-        <div className="flex items-start justify-between gap-2">
-          <CardTitle className="text-lg font-bold text-foreground leading-tight line-clamp-2">
-            {course.title}
-          </CardTitle>
-          <Badge variant="secondary" className="flex-shrink-0 text-xs">
-            {course.level}
+        <div className="flex items-start justify-between gap-2 mb-2">
+          <Badge variant="secondary" className="text-xs bg-domestika-green text-white">
+            {course.category}
           </Badge>
-        </div>
-        <CardDescription className="text-domestika-coral font-medium">
-          {course.instructor}
-        </CardDescription>
-      </CardContent>
-      
-      <CardContent className="pt-0">
-        <p className="text-muted-foreground text-sm mb-3 line-clamp-2">
-          {course.description}
-        </p>
-        
-        <div className="flex items-center justify-between text-sm text-muted-foreground">
-          <div className="flex items-center space-x-3">
-            <div className="flex items-center">
-              <Star className="w-4 h-4 text-yellow-500 mr-1 fill-current" />
-              <span className="font-medium">{course.rating}</span>
-            </div>
-            <div className="flex items-center">
-              <Users className="w-4 h-4 mr-1" />
-              <span>{course.students.toLocaleString()}</span>
-            </div>
-            <div className="flex items-center">
-              <Clock className="w-4 h-4 mr-1" />
-              <span>{course.duration}</span>
-            </div>
+          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+            <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+            <span>{course.rating}</span>
           </div>
         </div>
         
-        <Badge variant="outline" className="mt-3 text-xs">
-          {course.category}
-        </Badge>
+        <CardTitle className="text-lg font-bold text-foreground line-clamp-2 mb-2">
+          {course.title}
+        </CardTitle>
+        
+        <CardDescription className="text-sm text-muted-foreground">
+          by {course.instructor}
+        </CardDescription>
+      </CardHeader>
+      
+      <CardContent className="pt-0">
+        <div className="flex items-center justify-between text-xs text-muted-foreground">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1">
+              <Clock className="w-3 h-3" />
+              <span>{course.duration}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <Users className="w-3 h-3" />
+              <span>{course.students}</span>
+            </div>
+          </div>
+          <div className="font-medium text-primary">
+            {course.price}
+          </div>
+        </div>
       </CardContent>
     </Card>
   );
