@@ -2,16 +2,18 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Trophy, Upload, BookOpen, Zap, Star } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Trophy, Upload, BookOpen, Zap, Star, ArrowRight } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useActivityTracker } from '@/hooks/useActivityTracker';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 
 const PointsInfoCard = () => {
   const { user } = useAuth();
   const { getUserPoints } = useActivityTracker();
   const [totalPoints, setTotalPoints] = useState(0);
   const [, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (user) {
@@ -38,6 +40,10 @@ const PointsInfoCard = () => {
 
   const handleExerciseClick = () => {
     setSearchParams({ view: 'journey' });
+  };
+
+  const handleTrackProgress = () => {
+    navigate('/points');
   };
 
   const pointsActivities = [
@@ -102,6 +108,16 @@ const PointsInfoCard = () => {
             </div>
           ))}
         </div>
+
+        {/* Track Progress Button */}
+        <Button
+          onClick={handleTrackProgress}
+          className="w-full domestika-gradient text-white hover:opacity-90 mt-4"
+        >
+          <Trophy className="w-4 h-4 mr-2" />
+          Track Your Progress
+          <ArrowRight className="w-4 h-4 ml-2" />
+        </Button>
 
         {!user && (
           <div className="text-center text-sm text-muted-foreground mt-4 p-3 bg-accent/10 rounded-domestika">
