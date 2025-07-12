@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { LoginModal } from './LoginModal';
 import { ActivityHistoryModal } from './ActivityHistoryModal';
+import { PointsModal } from './PointsModal';
 import { useToast } from '@/hooks/use-toast';
 import HeaderLogo from './HeaderLogo';
 import HeaderNavigation from './HeaderNavigation';
@@ -20,6 +21,7 @@ const Header: React.FC<HeaderProps> = ({ onCategorySelect }) => {
   const { toast } = useToast();
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showActivityModal, setShowActivityModal] = useState(false);
+  const [showPointsModal, setShowPointsModal] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleSignOut = async () => {
@@ -68,6 +70,7 @@ const Header: React.FC<HeaderProps> = ({ onCategorySelect }) => {
             onCategorySelect={onCategorySelect}
             onShowLoginModal={() => setShowLoginModal(true)}
             onShowActivityModal={() => setShowActivityModal(true)}
+            onShowPointsModal={() => setShowPointsModal(true)}
             onSignOut={handleSignOut}
           />
         </div>
@@ -75,6 +78,7 @@ const Header: React.FC<HeaderProps> = ({ onCategorySelect }) => {
 
       <LoginModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} />
       <ActivityHistoryModal isOpen={showActivityModal} onClose={() => setShowActivityModal(false)} />
+      <PointsModal isOpen={showPointsModal} onClose={() => setShowPointsModal(false)} />
     </>
   );
 };

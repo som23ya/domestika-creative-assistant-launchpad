@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Clock, Users, Star } from 'lucide-react';
+import { Clock, Users, Star, Trophy } from 'lucide-react';
 import { DomestikaCourse } from '@/services/domestikaService';
 
 interface CourseCardProps {
@@ -57,7 +57,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, onClick }) => {
       </CardHeader>
       
       <CardContent className="pt-0">
-        <div className="flex items-center justify-between text-xs text-muted-foreground">
+        <div className="flex items-center justify-between text-xs text-muted-foreground mb-3">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1">
               <Clock className="w-3 h-3" />
@@ -71,6 +71,14 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, onClick }) => {
           <div className="font-medium text-primary">
             {course.price}
           </div>
+        </div>
+        
+        {/* Points Badge */}
+        <div className="flex items-center justify-center">
+          <Badge className="bg-orange-100 text-orange-800 hover:bg-orange-200 text-xs">
+            <Trophy className="w-3 h-3 mr-1" />
+            Earn 50 points
+          </Badge>
         </div>
       </CardContent>
     </Card>

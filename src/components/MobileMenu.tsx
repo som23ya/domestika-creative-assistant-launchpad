@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ExternalLink, LogIn, LogOut, User } from 'lucide-react';
+import { ExternalLink, LogIn, LogOut, User, Trophy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -12,6 +12,7 @@ interface MobileMenuProps {
   onCategorySelect?: (categorySlug: string) => void;
   onShowLoginModal: () => void;
   onShowActivityModal: () => void;
+  onShowPointsModal: () => void;
   onSignOut: () => void;
 }
 
@@ -21,6 +22,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
   onCategorySelect,
   onShowLoginModal,
   onShowActivityModal,
+  onShowPointsModal,
   onSignOut
 }) => {
   const { user, loading } = useAuth();
@@ -102,6 +104,17 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
             <span className="text-sm text-muted-foreground px-3 py-1">
               Welcome, {user.email?.split('@')[0]}!
             </span>
+            <Button
+              onClick={() => {
+                onShowPointsModal();
+                onClose();
+              }}
+              variant="ghost"
+              className="justify-start hover:text-domestika-coral hover:bg-domestika-gray-light"
+            >
+              <Trophy className="w-4 h-4 mr-2" />
+              Points
+            </Button>
             <Button
               onClick={() => {
                 onShowActivityModal();
