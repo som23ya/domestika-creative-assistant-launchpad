@@ -1,6 +1,9 @@
-Domestika Creative AI Assitant - A lovable App
+Domestika Creative AI Assistant
 
 ## Project info
+- An AI-powered tool personalizing creative learning for Domestika’s 8M+ users.
+- Offers tailored courses, smart feedback, and a points-based gamification system to inspire growth.
+- Built on Lovable App, set to revolutionize creative education.
 
 **URL**: https://domestika-creative-assistant-launchpad.lovable.app/
 
