@@ -1,4 +1,4 @@
-Domestika Creative AI Asssitant - A lovable App
+Domestika Creative AI Assitant - A lovable App
 
 ## Project info
 
