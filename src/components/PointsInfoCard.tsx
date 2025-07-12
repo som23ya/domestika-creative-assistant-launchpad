@@ -5,11 +5,13 @@ import { Badge } from '@/components/ui/badge';
 import { Trophy, Upload, BookOpen, Zap, Star } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useActivityTracker } from '@/hooks/useActivityTracker';
+import { useSearchParams } from 'react-router-dom';
 
 const PointsInfoCard = () => {
   const { user } = useAuth();
   const { getUserPoints } = useActivityTracker();
   const [totalPoints, setTotalPoints] = useState(0);
+  const [, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     if (user) {
@@ -22,24 +24,43 @@ const PointsInfoCard = () => {
     setTotalPoints(points);
   };
 
+  const handleUploadClick = () => {
+    setSearchParams({ view: 'feedback' });
+  };
+
+  const handleCourseClick = () => {
+    // Scroll to courses section
+    const coursesSection = document.getElementById('courses-section');
+    if (coursesSection) {
+      coursesSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const handleExerciseClick = () => {
+    setSearchParams({ view: 'journey' });
+  };
+
   const pointsActivities = [
     {
       icon: Upload,
       activity: 'Upload Project for AI Feedback',
       points: 20,
-      description: 'Get personalized insights on your creative work'
+      description: 'Get personalized insights on your creative work',
+      onClick: handleUploadClick
     },
     {
       icon: BookOpen,
       activity: 'Select a Course',
       points: 50,
-      description: 'Choose courses that match your interests'
+      description: 'Choose courses that match your interests',
+      onClick: handleCourseClick
     },
     {
       icon: Zap,
       activity: 'Complete an Exercise',
       points: 50,
-      description: 'Practice and improve your skills'
+      description: 'Practice and improve your skills',
+      onClick: handleExerciseClick
     }
   ];
 
@@ -65,7 +86,8 @@ const PointsInfoCard = () => {
           {pointsActivities.map((item, index) => (
             <div
               key={index}
-              className="flex items-center gap-3 p-3 border border-border rounded-domestika hover:bg-accent/10 transition-colors"
+              className="flex items-center gap-3 p-3 border border-border rounded-domestika hover:bg-accent/10 transition-colors cursor-pointer"
+              onClick={item.onClick}
             >
               <div className="w-10 h-10 domestika-gradient rounded-full flex items-center justify-center text-white">
                 <item.icon className="w-5 h-5" />

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Sparkles, ArrowRight, Users, Award, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -226,7 +225,7 @@ const Index = () => {
       </section>
 
       {/* Recommended Courses Section */}
-      <section className="py-12 sm:py-20 px-domestika bg-white">
+      <section id="courses-section" className="py-12 sm:py-20 px-domestika bg-white">
         <div className="max-w-domestika mx-auto">
           <div className="flex justify-between items-center mb-8">
             <div></div>
