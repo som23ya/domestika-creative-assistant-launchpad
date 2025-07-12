@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -51,7 +52,7 @@ const ProjectFeedback: React.FC<ProjectFeedbackProps> = ({ onBack }) => {
         if (uploadError) throw uploadError;
         projectId = uploadData.path;
 
-        // Track project upload activity
+        // Track project upload activity - this awards points for upload
         await trackActivity('project_upload', {
           project_id: projectId,
           filename: file.name
@@ -64,7 +65,7 @@ const ProjectFeedback: React.FC<ProjectFeedbackProps> = ({ onBack }) => {
       const result = generateFeedback();
       setFeedback(result);
 
-      // Track feedback received activity if user is logged in
+      // Track feedback received activity if user is logged in - this awards additional points for receiving feedback
       if (user) {
         await trackActivity('feedback_received', {
           project_id: projectId,
@@ -103,6 +104,11 @@ const ProjectFeedback: React.FC<ProjectFeedbackProps> = ({ onBack }) => {
         <p className="text-body text-muted-foreground max-w-2xl mx-auto">
           Upload your creative work to receive AI-powered insights and personalized feedback
         </p>
+        {user && (
+          <Badge className="bg-orange-100 text-orange-800 hover:bg-orange-200 mt-2">
+            Earn 40 points total (20 for upload + 20 for feedback)
+          </Badge>
+        )}
       </div>
 
       <div className="grid md:grid-cols-2 gap-domestika">

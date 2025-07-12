@@ -101,7 +101,9 @@ export function useActivityTracker() {
       if (error) throw error;
 
       return data.reduce((total, activity) => {
-        const points = activity.activity_details?.points_earned || 0;
+        // Safely access points_earned from the JSON object
+        const activityDetails = activity.activity_details as any;
+        const points = activityDetails?.points_earned || 0;
         return total + points;
       }, 0);
     } catch (error) {

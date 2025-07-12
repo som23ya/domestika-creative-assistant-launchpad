@@ -1,11 +1,10 @@
 
 import React, { useState } from 'react';
-import { LogIn, LogOut, User, Trophy } from 'lucide-react';
+import { LogIn, LogOut, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { LoginModal } from './LoginModal';
 import { ActivityHistoryModal } from './ActivityHistoryModal';
-import { PointsModal } from './PointsModal';
 import { useToast } from '@/hooks/use-toast';
 
 const UserActions = () => {
@@ -13,7 +12,6 @@ const UserActions = () => {
   const { toast } = useToast();
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showActivityModal, setShowActivityModal] = useState(false);
-  const [showPointsModal, setShowPointsModal] = useState(false);
 
   const handleSignOut = async () => {
     try {
@@ -45,14 +43,6 @@ const UserActions = () => {
         {user ? (
           <>
             <Button
-              onClick={() => setShowPointsModal(true)}
-              variant="ghost"
-              className="text-foreground hover:text-domestika-coral hover:bg-domestika-gray-light"
-            >
-              <Trophy className="w-4 h-4 mr-2" />
-              Points
-            </Button>
-            <Button
               onClick={() => setShowActivityModal(true)}
               variant="ghost"
               className="text-foreground hover:text-domestika-coral hover:bg-domestika-gray-light"
@@ -82,7 +72,6 @@ const UserActions = () => {
 
       <LoginModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} />
       <ActivityHistoryModal isOpen={showActivityModal} onClose={() => setShowActivityModal(false)} />
-      <PointsModal isOpen={showPointsModal} onClose={() => setShowPointsModal(false)} />
     </>
   );
 };

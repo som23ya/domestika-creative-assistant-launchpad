@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Sparkles, ArrowRight, Users, Award, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -6,6 +7,8 @@ import Header from '@/components/Header';
 import CreativeJourney from '@/components/CreativeJourney';
 import ProjectFeedback from '@/components/ProjectFeedback';
 import CourseGrid from '@/components/CourseGrid';
+import PointsInfoCard from '@/components/PointsInfoCard';
+import Footer from '@/components/Footer';
 import { domestikaService, DomestikaCourse } from '@/services/domestikaService';
 import { useSearchParams } from 'react-router-dom';
 
@@ -119,6 +122,7 @@ const Index = () => {
             <ProjectFeedback onBack={handleBackToHome} />
           </div>
         </div>
+        <Footer />
       </div>
     );
   }
@@ -189,6 +193,34 @@ const Index = () => {
             <div className="absolute -top-10 -left-10 w-16 h-16 bg-domestika-green rounded-full opacity-20 floating-animation"></div>
             <div className="absolute -bottom-5 -right-15 w-12 h-12 bg-domestika-blue rounded-full opacity-30 floating-animation" style={{animationDelay: '2s'}}></div>
             <div className="absolute top-5 right-10 w-8 h-8 bg-domestika-coral rounded-full opacity-25 floating-animation" style={{animationDelay: '4s'}}></div>
+          </div>
+        </div>
+      </section>
+
+      {/* Points Info Section */}
+      <section className="py-12 px-domestika">
+        <div className="max-w-domestika mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2">
+              <PointsInfoCard />
+            </div>
+            <div className="space-y-6">
+              <Card className="domestika-card text-center">
+                <CardHeader className="pb-4">
+                  <div className="w-16 h-16 domestika-gradient rounded-domestika flex items-center justify-center mx-auto mb-4 shadow-sm">
+                    <Award className="w-8 h-8 text-white" />
+                  </div>
+                  <CardTitle className="text-xl font-bold text-foreground">
+                    Track Progress
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="text-muted-foreground leading-relaxed">
+                    Monitor your creative journey with our comprehensive points system and activity tracking.
+                  </CardDescription>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
       </section>
@@ -274,6 +306,8 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      <Footer />
     </div>
   );
 };
