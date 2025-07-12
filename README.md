@@ -58,7 +58,7 @@ This project is built with:
 
 ## How can I deploy this project?
 
-Simply open [Lovable](https://lovable.dev/projects/cabc4306-4198-4351-b161-30820db41197) and click on Share -> Publish.
+Simply open [Lovable](https://lovable.dev/) and click on Share -> Publish.
 
 ## **Known Gaps**
 
