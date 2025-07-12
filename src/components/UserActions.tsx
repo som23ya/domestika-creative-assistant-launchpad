@@ -56,17 +56,15 @@ const UserActions = () => {
   return (
     <>
       <div className="flex items-center space-x-2">
-        {/* Points Button - Always visible when user is logged in */}
-        {user && (
-          <Button
-            onClick={() => setShowPointsModal(true)}
-            variant="ghost"
-            className="text-foreground hover:text-domestika-coral hover:bg-domestika-gray-light"
-          >
-            <Trophy className="w-4 h-4 mr-2" />
-            {totalPoints} Points
-          </Button>
-        )}
+        {/* Points Button - Always visible */}
+        <Button
+          onClick={() => setShowPointsModal(true)}
+          variant="ghost"
+          className="text-foreground hover:text-domestika-coral hover:bg-domestika-gray-light"
+        >
+          <Trophy className="w-4 h-4 mr-2" />
+          {user ? `${totalPoints} Points` : 'Earn Points'}
+        </Button>
         
         {user ? (
           <div className="hidden md:flex items-center space-x-2">

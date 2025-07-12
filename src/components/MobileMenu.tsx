@@ -43,19 +43,21 @@ const MobileMenu: React.FC<MobileMeneProp> = ({
   return (
     <>
       <div className="md:hidden bg-white border-t border-border py-4 space-y-4">
+        {/* Points Button - Always visible */}
+        <Button
+          onClick={() => {
+            setShowPointsModal(true);
+            onClose();
+          }}
+          variant="ghost"
+          className="w-full justify-start text-foreground hover:text-domestika-coral hover:bg-domestika-gray-light"
+        >
+          <Trophy className="w-4 h-4 mr-2" />
+          {user ? `${totalPoints} Points` : 'Earn Points'}
+        </Button>
+        
         {user ? (
           <>
-            <Button
-              onClick={() => {
-                setShowPointsModal(true);
-                onClose();
-              }}
-              variant="ghost"
-              className="w-full justify-start text-foreground hover:text-domestika-coral hover:bg-domestika-gray-light"
-            >
-              <Trophy className="w-4 h-4 mr-2" />
-              {totalPoints} Points
-            </Button>
             <Button
               onClick={() => {
                 onShowActivityModal();
