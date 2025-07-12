@@ -6,14 +6,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { mockBackend, searchCreativeInterests, type SkillRecommendation } from '@/services/mockBackend';
+import { domestikaService, DomestikaCourse } from '@/services/domestikaService';
 import { useAuth } from '@/contexts/AuthContext';
 import { useActivityTracker } from '@/hooks/useActivityTracker';
+import CourseGrid from './CourseGrid';
 
 interface CreativeJourneyProps {
   onBack: () => void;
 }
-
-// Using SkillRecommendation from mockBackend service
 
 const CreativeJourney: React.FC<CreativeJourneyProps> = ({ onBack }) => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -22,6 +22,8 @@ const CreativeJourney: React.FC<CreativeJourneyProps> = ({ onBack }) => {
   const [userInterest, setUserInterest] = useState('');
   const [recommendations, setRecommendations] = useState<SkillRecommendation | null>(null);
   const [showPersonalizedJourney, setShowPersonalizedJourney] = useState(false);
+  const [relatedCourses, setRelatedCourses] = useState<DomestikaCourse[]>([]);
+  const [coursesLoading, setCoursesLoading] = useState(false);
   
   // Predictive search state
   const [searchSuggestions, setSearchSuggestions] = useState<string[]>([]);
@@ -129,8 +131,6 @@ const CreativeJourney: React.FC<CreativeJourneyProps> = ({ onBack }) => {
     }
   };
 
-  // Skill recommendations now handled by mockBackend service
-
   const handleCategorySelect = (categoryId: string) => {
     setSelectedCategory(categoryId);
     setIsLoading(true);
@@ -146,6 +146,7 @@ const CreativeJourney: React.FC<CreativeJourneyProps> = ({ onBack }) => {
     if (!userInterest.trim()) return;
     
     setIsLoading(true);
+    setCoursesLoading(true);
     
     try {
       // Track exercise selection activity if user is logged in
@@ -162,11 +163,18 @@ const CreativeJourney: React.FC<CreativeJourneyProps> = ({ onBack }) => {
       });
       
       setRecommendations(recommendation);
+
+      // Fetch related courses from Domestika
+      const courses = await domestikaService.searchCourses(userInterest, 8);
+      setRelatedCourses(courses);
+      
     } catch (error) {
       console.error('[CreativeJourney] Error processing skill journey:', error);
       setRecommendations(null);
+      setRelatedCourses([]);
     } finally {
       setIsLoading(false);
+      setCoursesLoading(false);
     }
   };
 
@@ -272,7 +280,7 @@ const CreativeJourney: React.FC<CreativeJourneyProps> = ({ onBack }) => {
               )}
 
               {!isLoading && userInterest && (
-                <div className="mt-6">
+                <div className="mt-6 space-y-6">
                   {recommendations ? (
                     <div className="space-y-4">
                       <h3 className="text-lg sm:text-xl font-bold domestika-text-coral mb-4">
@@ -331,6 +339,18 @@ const CreativeJourney: React.FC<CreativeJourneyProps> = ({ onBack }) => {
                         </div>
                       </CardContent>
                     </Card>
+                  )}
+
+                  {/* Related Courses from Domestika */}
+                  {relatedCourses.length > 0 && (
+                    <div className="mt-8">
+                      <CourseGrid
+                        courses={relatedCourses}
+                        loading={coursesLoading}
+                        title={`Domestika Courses for "${userInterest}"`}
+                        subtitle="Professional courses from Domestika's catalog"
+                      />
+                    </div>
                   )}
                 </div>
               )}

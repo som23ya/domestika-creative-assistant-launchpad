@@ -1,14 +1,20 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Sparkles, ArrowRight, Users, Award, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import Header from '@/components/Header';
 import CreativeJourney from '@/components/CreativeJourney';
 import ProjectFeedback from '@/components/ProjectFeedback';
+import CourseGrid from '@/components/CourseGrid';
+import { domestikaService, DomestikaCourse } from '@/services/domestikaService';
 
 const Index = () => {
   const [currentView, setCurrentView] = useState<'home' | 'journey' | 'feedback'>('home');
+  const [recommendedCourses, setRecommendedCourses] = useState<DomestikaCourse[]>([]);
+  const [filteredCourses, setFilteredCourses] = useState<DomestikaCourse[]>([]);
+  const [coursesLoading, setCoursesLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const features = [
     {
@@ -33,6 +39,52 @@ const Index = () => {
     }
   ];
 
+  // Load recommended courses on component mount
+  useEffect(() => {
+    const loadCourses = async () => {
+      try {
+        setCoursesLoading(true);
+        const courses = await domestikaService.getPopularCourses(12);
+        setRecommendedCourses(courses);
+        setFilteredCourses(courses);
+      } catch (error) {
+        console.error('Failed to load courses:', error);
+      } finally {
+        setCoursesLoading(false);
+      }
+    };
+
+    loadCourses();
+  }, []);
+
+  // Handle category selection from header
+  const handleCategorySelect = async (categorySlug: string) => {
+    try {
+      setCoursesLoading(true);
+      setSelectedCategory(categorySlug);
+      const courses = await domestikaService.getCoursesByCategory(categorySlug, 12);
+      setFilteredCourses(courses);
+    } catch (error) {
+      console.error('Failed to load category courses:', error);
+      setFilteredCourses([]);
+    } finally {
+      setCoursesLoading(false);
+    }
+  };
+
+  // Reset to show all courses
+  const handleShowAllCourses = async () => {
+    try {
+      setCoursesLoading(true);
+      setSelectedCategory(null);
+      setFilteredCourses(recommendedCourses);
+    } catch (error) {
+      console.error('Failed to reset courses:', error);
+    } finally {
+      setCoursesLoading(false);
+    }
+  };
+
   if (currentView === 'journey') {
     return <CreativeJourney onBack={() => setCurrentView('home')} />;
   }
@@ -40,7 +92,7 @@ const Index = () => {
   if (currentView === 'feedback') {
     return (
       <div className="min-h-screen bg-white">
-        <Header />
+        <Header onCategorySelect={handleCategorySelect} />
         <div className="py-8 px-domestika">
           <div className="max-w-domestika mx-auto">
             <ProjectFeedback onBack={() => setCurrentView('home')} />
@@ -50,9 +102,24 @@ const Index = () => {
     );
   }
 
+  const getCoursesSectionTitle = () => {
+    if (selectedCategory) {
+      const category = domestikaService.getCategories().find(cat => cat.slug === selectedCategory);
+      return `${category?.name || 'Category'} Courses`;
+    }
+    return 'Recommended Courses from Domestika';
+  };
+
+  const getCoursesSectionSubtitle = () => {
+    if (selectedCategory) {
+      return 'Discover courses in your selected category';
+    }
+    return 'Explore popular courses handpicked from Domestika\'s extensive catalog';
+  };
+
   return (
     <div className="min-h-screen bg-white">
-      <Header />
+      <Header onCategorySelect={handleCategorySelect} />
       
       {/* Hero Section */}
       <section className="py-12 sm:py-20 px-domestika">
@@ -96,6 +163,31 @@ const Index = () => {
             <div className="absolute -bottom-5 -right-15 w-12 h-12 bg-domestika-blue rounded-full opacity-30 floating-animation" style={{animationDelay: '2s'}}></div>
             <div className="absolute top-5 right-10 w-8 h-8 bg-domestika-coral rounded-full opacity-25 floating-animation" style={{animationDelay: '4s'}}></div>
           </div>
+        </div>
+      </section>
+
+      {/* Recommended Courses Section */}
+      <section className="py-12 sm:py-20 px-domestika bg-white">
+        <div className="max-w-domestika mx-auto">
+          <div className="flex justify-between items-center mb-8">
+            <div></div>
+            {selectedCategory && (
+              <Button
+                onClick={handleShowAllCourses}
+                variant="outline"
+                className="border-primary text-primary hover:bg-primary hover:text-white"
+              >
+                Show All Courses
+              </Button>
+            )}
+          </div>
+          
+          <CourseGrid
+            courses={filteredCourses}
+            loading={coursesLoading}
+            title={getCoursesSectionTitle()}
+            subtitle={getCoursesSectionSubtitle()}
+          />
         </div>
       </section>
 
@@ -155,26 +247,6 @@ const Index = () => {
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="py-8 sm:py-12 px-domestika domestika-bg-light border-t border-border">
-        <div className="max-w-domestika mx-auto text-center space-y-4">
-          <p className="text-muted-foreground text-sm sm:text-base">
-            Powered by advanced AI technology • Inspired by creative excellence
-          </p>
-          <div className="flex justify-center items-center space-x-2">
-            <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 domestika-text-coral" />
-            <span className="text-sm font-medium domestika-text-coral">
-              Domestika Creative Assistant
-            </span>
-          </div>
-          <div className="pt-4 border-t border-border">
-            <p className="text-caption text-domestika-gray-medium">
-              Prototype by <span className="font-medium text-foreground">AI Assistant</span> for Domestika Take-Home Assignment
-            </p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };

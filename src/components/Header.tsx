@@ -1,14 +1,25 @@
 
 import React, { useState } from 'react';
-import { Sparkles, LogIn, LogOut, User, ExternalLink, Menu, X } from 'lucide-react';
+import { Sparkles, LogIn, LogOut, User, ExternalLink, Menu, X, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { LoginModal } from './LoginModal';
 import { ActivityHistoryModal } from './ActivityHistoryModal';
 import { useToast } from '@/hooks/use-toast';
 import { Link } from 'react-router-dom';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { DOMESTIKA_CATEGORIES } from '@/services/domestikaService';
 
-const Header = () => {
+interface HeaderProps {
+  onCategorySelect?: (categorySlug: string) => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ onCategorySelect }) => {
   const { user, signOut, loading } = useAuth();
   const { toast } = useToast();
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -29,6 +40,13 @@ const Header = () => {
         variant: "destructive",
       });
     }
+  };
+
+  const handleCategorySelect = (categorySlug: string) => {
+    if (onCategorySelect) {
+      onCategorySelect(categorySlug);
+    }
+    setMobileMenuOpen(false);
   };
 
   const navItems = [
@@ -63,6 +81,30 @@ const Header = () => {
                   </Button>
                 </Link>
               ))}
+              
+              {/* Browse Categories Dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="text-foreground hover:text-primary"
+                  >
+                    Browse Categories
+                    <ChevronDown className="w-4 h-4 ml-2" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56 max-h-80 overflow-y-auto bg-white border border-input shadow-lg z-50">
+                  {DOMESTIKA_CATEGORIES.map((category) => (
+                    <DropdownMenuItem
+                      key={category.id}
+                      onClick={() => handleCategorySelect(category.slug)}
+                      className="cursor-pointer hover:bg-domestika-gray-light focus:bg-domestika-gray-light"
+                    >
+                      {category.name}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
               
               <Button
                 onClick={() => window.open('https://www.domestika.org', '_blank')}
@@ -130,6 +172,23 @@ const Header = () => {
                     </Button>
                   </Link>
                 ))}
+                
+                {/* Mobile Categories */}
+                <div className="border-t border-border pt-2 mt-2">
+                  <p className="text-sm font-medium text-muted-foreground px-3 py-2">Categories</p>
+                  <div className="max-h-48 overflow-y-auto">
+                    {DOMESTIKA_CATEGORIES.map((category) => (
+                      <Button
+                        key={category.id}
+                        variant="ghost"
+                        className="w-full justify-start text-sm"
+                        onClick={() => handleCategorySelect(category.slug)}
+                      >
+                        {category.name}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
                 
                 <Button
                   onClick={() => {
